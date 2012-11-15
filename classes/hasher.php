@@ -15,6 +15,11 @@ class Hasher
 	private $driver_instances = array();
 	private $config = array();
 
+	/**
+	 * Gets a working instance of this object 
+	 * 
+	 * @return Ethanol\Hasher
+	 */
 	public static function instance()
 	{
 		if (static::$instance == null)
@@ -28,7 +33,8 @@ class Hasher
 	private function __construct()
 	{
 		//Load default hashing driver from config.
-		$this->config = \Arr::get(\Config::load('ethanol'), 'hashing', array());
+		\Config::load('ethanol', true);
+		$this->config = \Config::get('ethanol.hashing', array());
 	}
 
 	/**
@@ -40,13 +46,13 @@ class Hasher
 	 */
 	public function hash($string, $salt = '', $driver = null)
 	{
-		if (!$driverInstance = \Arr::get($this->driver_instances, $driver, false))
+		$driverClass = ($driver)? $driver : \Arr::get($this->config, 'default_driver') ;
+		
+		if (!$driverInstance = \Arr::get($this->driver_instances, $driverClass, false))
 		{
-			$driverClass = \Arr::get($this->config, 'default_driver');
-
 			$driverInstance = $this->driver_instances[$driverClass] = new $driverClass;
 		}
-
+		
 		return $driverInstance->hash($string, $salt);
 	}
 

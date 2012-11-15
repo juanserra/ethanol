@@ -27,7 +27,8 @@ class Random
 	private function __construct()
 	{
 		//Load default hashing driver from config.
-		$this->config = \Arr::get(\Config::load('ethanol'), 'random', array());
+		\Config::load('ethanol', true);
+		$this->config = \Config::get('ethanol.random', array());
 	}
 	
 	/**
@@ -39,10 +40,10 @@ class Random
 	 */
 	public function random($length=25, $driver = null)
 	{
-		if (!$driverInstance = \Arr::get($this->driver_instances, $driver, false))
+		$driverClass = ($driver)? $driver : \Arr::get($this->config, 'default_driver') ;
+		
+		if (!$driverInstance = \Arr::get($this->driver_instances, $driverClass, false))
 		{
-			$driverClass = \Arr::get($this->config, 'default_driver');
-
 			$driverInstance = $this->driver_instances[$driverClass] = new $driverClass;
 		}
 

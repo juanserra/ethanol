@@ -11,6 +11,11 @@ Autoloader::add_classes(array(
 	'Ethanol\Hash_Driver'          => __DIR__.'/classes/hash/driver.php',
 	'Ethanol\Hash_Driver_Sha1'     => __DIR__.'/classes/hash/driver/sha1.php',
 	
+	//Random related classes
+	'Ethanol\Random'               => __DIR__.'/classes/random.php',
+	'Ethanol\Random_Driver'        => __DIR__.'/classes/random/driver.php',
+	'Ethanol\Random_Driver_Simple' => __DIR__.'/classes/random/driver/simple.php',
+	
 	'Ethanol\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',
 	'Ethanol\Auth_Driver_Database' => __DIR__.'/classes/auth/driver/database.php',
 	

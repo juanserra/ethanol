@@ -3,12 +3,11 @@
 namespace Ethanol;
 
 /**
- * Will controll the ability to use difernent hashing/random libraries
  * 
- * @author Steve "uru" West <uruwolf@gmail.com>
+ * @author Steve "Uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
  */
-class Hasher
+class Random
 {
 
 	private static $instance = null;
@@ -28,17 +27,17 @@ class Hasher
 	private function __construct()
 	{
 		//Load default hashing driver from config.
-		$this->config = \Arr::get(\Config::load('ethanol'), 'hashing', array());
+		$this->config = \Arr::get(\Config::load('ethanol'), 'random', array());
 	}
-
+	
 	/**
+	 * Generates a random string of the given length with the given driver
 	 * 
-	 * @param string $string The string to hash
-	 * @param string $salt The salt to add to the hash
-	 * @param string $driver The driver to use, or null for the default hash driver
-	 * @return string The hashed string.
+	 * @param int $length Length of the string to generate. Defaults to 25
+	 * @param string $driver Name of the driver to use. Null to use the default
+	 * @return string
 	 */
-	public function hash($string, $salt = '', $driver = null)
+	public function random($length=25, $driver = null)
 	{
 		if (!$driverInstance = \Arr::get($this->driver_instances, $driver, false))
 		{
@@ -47,7 +46,7 @@ class Hasher
 			$driverInstance = $this->driver_instances[$driverClass] = new $driverClass;
 		}
 
-		return $driverInstance->hash($string, $salt);
+		return $driverInstance->random($length);
 	}
 
 }

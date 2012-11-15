@@ -1,5 +1,9 @@
 <?php
 return array(
+	//Set to true to make users validate their email address before being able to log in
+	'activate_emails' => true,
+	'activation_key_length' => 10,
+	
 	//Various settings for the hashing class
 	'hashing' => array(
 		//Default hashing driver to use if none is specified.

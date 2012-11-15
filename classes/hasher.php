@@ -46,8 +46,8 @@ class Hasher
 	 */
 	public function hash($string, $salt = '', $driver = null)
 	{
-		$driverClass = ($driver)? $driver : \Arr::get($this->config, 'default_driver') ;
-		
+		$driverClass = ($driver) ? $driver : \Arr::get($this->config, 'default_driver');
+
 		if (!$driverInstance = \Arr::get($this->driver_instances, $driverClass, false))
 		{
 			$driverInstance = $this->driver_instances[$driverClass] = new $driverClass;

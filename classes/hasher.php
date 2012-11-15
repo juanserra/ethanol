@@ -6,8 +6,38 @@ namespace Ethanol;
  * Will controll the ability to use difernent hashing/random libraries
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
+ * @license http://philsturgeon.co.uk/code/dbad-license DbaD
  */
 class Hasher
 {
-	//Code here
+
+	private static $instance = null;
+
+	public static function instance()
+	{
+		if (static::$instance == null)
+		{
+			static::$instance = new static();
+		}
+
+		return static::$instance;
+	}
+
+	private function __construct()
+	{
+		//Load default hashing driver from config.
+	}
+
+	/**
+	 * 
+	 * @param string $string The string to hash
+	 * @param string $salt The salt to add to the hash
+	 * @param string $driver The driver to use, or null for the default hash driver
+	 * @return string The hashed string.
+	 */
+	public function hash($string, $salt='', $driver = null)
+	{
+		
+	}
+
 }

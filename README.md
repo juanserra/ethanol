@@ -1,7 +1,7 @@
 Ethanol
 =======
 
-Will be a super awesome auth package for fuelPHP
+Will be a super duper awesome auth package for FuelPHP
 
 License
 =======

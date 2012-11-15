@@ -12,6 +12,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Auth_Driver_Database' => __DIR__.'/classes/auth/driver/database.php',
 	
 	'Ethanol\Model_User'           => __DIR__.'/classes/model/user.php',
+	'Ethanol\Model_User_Meta'      => __DIR__.'/classes/model/user/meta.php',
 	'Ethanol\Model_User_Group'     => __DIR__.'/classes/model/user/group.php',
 	'Ethanol\Model_User'           => __DIR__.'/classes/model/permission.php',
 ));

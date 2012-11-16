@@ -60,6 +60,11 @@ class Ethanol
 		
 	}
 	
+	public function user_exists($email)
+	{
+		return Auth::instance()->user_exists($email);
+	}
+	
 	/**
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.

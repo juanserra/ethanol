@@ -28,4 +28,4 @@ Autoloader::add_classes(array(
 	'Ethanol\Model_Permission'     => __DIR__.'/classes/model/permission.php',
 ));
 
-Ethanol\Auth::instance()->register_driver('Ethanol\Auth_Driver_Database');
+Ethanol\Auth::instance()->register_driver('database');

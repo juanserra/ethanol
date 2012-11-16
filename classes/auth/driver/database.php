@@ -91,5 +91,12 @@ class Auth_Driver_Database extends Auth_Driver
 
 		return true;
 	}
+
+	public function has_user($email)
+	{
+		$users = Model_User::find_by_email($email);
+		
+		return (count($users) > 0);
+	}
 	
 }

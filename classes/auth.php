@@ -32,11 +32,15 @@ class Auth
 	/**
 	 * Registers the given auth driver 
 	 * 
-	 * @param type $class
+	 * @param string|array $drivers
 	 */
-	public function register_driver($class)
+	public function register_driver($drivers)
 	{
-		$this->avaliable_drivers[] = $class;
+		$drivers = (array) $drivers;
+		foreach($drivers as $driver)
+		{
+			$this->avaliable_drivers[] = $driver;
+		}
 	}
 	
 	/**
@@ -83,9 +87,10 @@ class Auth
 	}
 	
 	/**
+	 * Activates the user with the given driver
 	 * 
-	 * @param type $driver
-	 * @param type $userdata
+	 * @param string $driver Name of the driver to activate.
+	 * @param array|string $userdata Data regarding activation. Check individual driver docs
 	 * @return boolean True if the user was activated.
 	 */
 	public function activate_user($driver, $userdata)
@@ -93,4 +98,24 @@ class Auth
 		return $this->get_driver($driver)->activate_user($userdata);
 	}
 	
+	/**
+	 * Asks all drivers if a user exists with the given email and returns a list
+	 * of drivers that reconise the user.
+	 * 
+	 * @param type $email
+	 * @return array 
+	 */
+	public function user_exists($email)
+	{	
+		$drivers = array();
+		foreach($this->avaliable_drivers as $driver)
+		{
+			if($this->get_driver($driver)->has_user($email))
+			{
+				$drivers[] = $driver;
+			}
+		}
+		
+		return $drivers;
+	}
 }

@@ -29,6 +29,14 @@ abstract class Auth_Driver
 	public abstract function activate_user($userdata);
 	
 	/**
+	 * Checks if the given user is reconised by this driver
+	 * 
+	 * @param string $email The email of the user to search for
+	 * @return boolean True if the user exists
+	 */
+	public abstract function has_user($email);
+	
+	/**
 	 * Attempts to find a user by email address or returns a new (unsaved) user
 	 * object if not.
 	 * 

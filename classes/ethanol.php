@@ -54,7 +54,7 @@ class Ethanol
 		//Generate a salt
 		$security->salt = Hasher::instance()->hash(\Date::time(), Random::instance()->random());
 		$security->password = Hasher::instance()->hash($password, $security->salt);
-		
+
 		if (\Config::get('ethanol.activate_emails', false))
 		{
 			$keyLength = \Config::get('ethanol.activation_key_length');
@@ -84,41 +84,49 @@ class Ethanol
 		{
 			$user->activated = 1;
 		}
-		
+
 		$user->security = $security;
 		$user->save();
 		unset($user->security);
-		
+
 		return $user;
 	}
-	
+
+	/**
+	 * Activates a user when they need to confirm their email address
+	 * 
+	 * @param string $key The key to try to activate
+	 * @return boolean True if the user was activated
+	 * @throws NoSuchActivationKey If the key given is invalid
+	 * @throws UserAlreadyActivated If the user has already been activated
+	 */
 	public function activate($key)
 	{
 		$security = Model_User_Security::find('first', array(
-			'related' => array(
-				'user'
-			),
-			'where' => array(
-				array('activation_hash', $key),
-			),
-		));
-		
+				'related' => array(
+					'user'
+				),
+				'where' => array(
+					array('activation_hash', $key),
+				),
+			));
+
 		//Check if an entry actually exists
-		if($security == null)
+		if ($security == null)
 		{
 			//User does not exist so thow exception
 			throw new NoSuchActivationKey(\Lang::get('ethanol.errors.noSuchKey'));
 		}
 		//Check that the user has not already been activated
-		if($security->user->activated != Model_User::$USER_INACTIVE)
+		if ($security->user->activated != Model_User::$USER_INACTIVE)
 		{
 			throw new UserAlreadyActivated(\Lang::get('ethanol.errors.userAlreadyActive'));
 		}
-		
+
 		$security->user->activated = Model_User::$USER_ACTIVATED;
 		$security->activation_hash = '';
 		$security->save();
-		
+
 		return true;
 	}
 
@@ -128,5 +136,12 @@ class Ethanol
 	//check permissions for user
 }
 
-class NoSuchActivationKey extends \Exception{}
-class UserAlreadyActivated extends \Exception{}
+class NoSuchActivationKey extends \Exception
+{
+	
+}
+
+class UserAlreadyActivated extends \Exception
+{
+	
+}

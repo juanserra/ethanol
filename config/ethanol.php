@@ -1,5 +1,10 @@
 <?php
 return array(
+	
+	//Auth settings
+	//Default auth driver to use if none specified
+	'default_auth_driver' => 'database',
+	
 	//Set to true to make users validate their email address before being able to log in
 	'activate_emails' => true,
 	'activation_key_length' => 10,

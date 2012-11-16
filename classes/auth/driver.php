@@ -3,6 +3,7 @@
 namespace Ethanol;
 
 /**
+ * Defines a common interface for authentication drivers.
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -10,12 +11,19 @@ namespace Ethanol;
 abstract class Auth_Driver
 {
 
-	//Log in
-	public abstract function login($username, $password);
+	/**
+	 * Asks the driver to create a new user.
+	 * 
+	 * @param string $email The email address of this user. This is required by all drivers.
+	 * @param array $userdata An array containing various information about the user to create.
+	 * @return Ethanol\Model_User The user object that was created.
+	 */
+	public abstract function create_user($email, $userdata);
 
-	//log out
-	public abstract function logout();
+	public abstract function activate_user($userdata);
 
-	//get user
-	public abstract function getUser($identifier);
 }
+
+class NoSuchActivationKey extends \Exception {}
+
+class UserAlreadyActivated extends \Exception {}

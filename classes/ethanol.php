@@ -62,6 +62,7 @@ class Ethanol
 		}
 		
 		$user->save();
+		unset($user->security);
 		return $user;
 	}
 	

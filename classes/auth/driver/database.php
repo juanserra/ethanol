@@ -3,6 +3,7 @@
 namespace Ethanol;
 
 /**
+ * Allows users to be stored in the databse.
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -35,7 +36,6 @@ class Auth_Driver_Database extends Auth_Driver
 
 			//Build an array of data that can be passed to the email template
 			$emailData = array(
-				'username' => $user->username,
 				'email' => $user->email,
 				'activation_path' => \Str::tr(
 					\Config::get('ethanol.activation_path'), array('key' => $security->activation_hash)

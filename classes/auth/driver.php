@@ -20,6 +20,12 @@ abstract class Auth_Driver
 	 */
 	public abstract function create_user($email, $userdata);
 
+	/**
+	 * Allows a user to be activated if user activation is required
+	 * 
+	 * @param array|string $userdata The data that is required for activation.
+	 * Check individual driver documentaion for what to pass.
+	 */
 	public abstract function activate_user($userdata);
 	
 	/**

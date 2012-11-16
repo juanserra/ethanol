@@ -5,6 +5,10 @@ return array(
 	//Default auth driver to use if none specified
 	'default_auth_driver' => 'database',
 	
+	//If log in attempts are logged or not. Disabling this will disable things
+	//like max log in attempts. It is recomended that this is enabled.
+	'log_log_in_attempts' => true,
+	
 	//Set to true to make users validate their email address before being able to log in
 	'activate_emails' => false,
 	'activation_key_length' => 10,

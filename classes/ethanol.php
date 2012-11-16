@@ -91,3 +91,5 @@ class Ethanol
 	//set group permissions
 	//check permissions for user
 }
+
+class LogInFailed extends \Exception{}

@@ -11,66 +11,79 @@ namespace Ethanol;
 class Ethanol
 {
 
-	private static $instance = null;
+	private static $instances = array();
+	private $driver;
 
-	public static function instance()
+	public static function instance($driver_name = null)
 	{
-		if (static::$instance == null)
+		if($driver_name == null)
+			$driver_name = \Config::get('ethanol.default_auth_driver');
+		
+		if (!$instance = \Arr::get(static::$instances, $driver_name, false))
 		{
-			static::$instance = new static;
+			$instance = static::$instances[$driver_name] = new static($driver_name);
 		}
 
-		return static::$instance;
+		return $instance;
 	}
 
-	private function __construct()
+	public static function _init()
 	{
 		\Config::load('ethanol', true);
 		\Lang::load('ethanol', 'ethanol');
+	}
+	
+	private function __construct($driver_name)
+	{
+		$this->driver = $driver_name;
 	}
 
 	/**
 	 * Attempts to log a user in
 	 * 
-	 * @param string $username
-	 * @param string $password
+	 * @param string $email
+	 * @param string|null $password
 	 */
-	public function log_in($username, $password = null)
+	public function log_in($email, $password = null)
+	{
+		//Check that the user exists.
+		
+		//Check that the information is correct.
+		
+		//Log the log in attempt if enabled.
+		
+		//return the user object and update the session.
+	}
+	
+	private function log_log_in_attempt($status)
 	{
 		
 	}
-
-	//log out
-	//user exists
-
+	
 	/**
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.
 	 * 
 	 * @param string $email
-	 * @param string $password
-	 * @param string $username Null if you want usernames to be the same as emails
+	 * @param string $userdata
 	 * 
 	 * @return Ethanol\Model_User The newly created user
 	 * 
 	 */
-	public function create_user($email, $userdata, $driver = null)
+	public function create_user($email, $userdata)
 	{
-		$driver = ($driver == null) ? \Config::get('ethanol.default_auth_driver') : $driver;
-		return Auth::instance()->create_user($driver, $email, $userdata);
+		return Auth::instance()->create_user($this->driver, $email, $userdata);
 	}
 
 	/**
 	 * Activates a user when they need to confirm their email address
 	 * 
 	 * @param string $userdata The information to pass to the driver
-	 * @param string $driver The auth driver to use. Null to use the default.
 	 * @return boolean True if the user was activated
 	 */
-	public function activate($userdata, $driver=null)
+	public function activate($userdata)
 	{
-		$driver = ($driver == null) ? \Config::get('ethanol.default_auth_driver') : $driver;
-		return Auth::instance()->activate_user($driver, $userdata);
+		return Auth::instance()->activate_user($this->driver, $userdata);
 	}
 
 	//get user info

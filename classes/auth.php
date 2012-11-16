@@ -118,4 +118,25 @@ class Auth
 		
 		return $drivers;
 	}
+	
+	/**
+	 * Asks each of the given drivers if the passed user cradentials are valid.
+	 * 
+	 * @param string $email The email of the account to check
+	 * @param array|string $userdata The extra user data to validate
+	 * @param array $drivers List of driver names to try
+	 * @return false|Ethanol\Model_User
+	 */
+	public function validate_user($email, $userdata, $drivers)
+	{
+		foreach($drivers as $driver)
+		{
+			if($user = $this->get_driver($driver)->validate_user($email, $userdata))
+			{
+				return $user;
+			}
+		}
+		
+		return false;
+	}
 }

@@ -14,7 +14,7 @@ class Auth_Driver_Database extends Auth_Driver
 	public function create_user($email, $userdata)
 	{
 		$password = \Arr::get($userdata, 'password');
-		
+
 		$user = Auth_Driver::get_core_user($email);
 
 		$security = new Model_User_Security;
@@ -24,7 +24,7 @@ class Auth_Driver_Database extends Auth_Driver
 		$security->password = Hasher::instance()->hash($password, $security->salt);
 
 		unset($password);
-		
+
 		if (\Config::get('ethanol.activate_emails', false))
 		{
 			$keyLength = \Config::get('ethanol.activation_key_length');
@@ -63,7 +63,7 @@ class Auth_Driver_Database extends Auth_Driver
 	}
 
 	public function activate_user($key)
-	{	
+	{
 		$security = Model_User_Security::find('first', array(
 				'related' => array(
 					'user'
@@ -95,8 +95,26 @@ class Auth_Driver_Database extends Auth_Driver
 	public function has_user($email)
 	{
 		$users = Model_User::find_by_email($email);
-		
+
 		return (count($users) > 0);
 	}
-	
+
+	public function validate_user($email, $userdata)
+	{
+		$user = Model_User::find_by_email($email, array('related' => array('security')));
+		
+		$password = \Arr::get($userdata, 'password');
+
+		//Hash the given password and check that against the user
+		$hashedPassword = Hasher::instance()->hash($password, $user->security->salt);
+
+		if ($hashedPassword == $user->security->password)
+		{
+			unset($user->security);
+			return $user;
+		}
+		
+		return false;
+	}
+
 }

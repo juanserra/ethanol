@@ -16,9 +16,9 @@ class Ethanol
 
 	public static function instance($driver_name = null)
 	{
-		if($driver_name == null)
+		if ($driver_name == null)
 			$driver_name = \Config::get('ethanol.default_auth_driver');
-		
+
 		if (!$instance = \Arr::get(static::$instances, $driver_name, false))
 		{
 			$instance = static::$instances[$driver_name] = new static($driver_name);
@@ -32,7 +32,7 @@ class Ethanol
 		\Config::load('ethanol', true);
 		\Lang::load('ethanol', 'ethanol');
 	}
-	
+
 	private function __construct($driver_name)
 	{
 		$this->driver = $driver_name;
@@ -42,29 +42,49 @@ class Ethanol
 	 * Attempts to log a user in
 	 * 
 	 * @param string $email
-	 * @param string|null $password
+	 * @param string|array $userdata
 	 */
-	public function log_in($email, $password = null)
+	public function log_in($email, $userdata)
 	{
 		//Check that the user exists.
-		
+		if (!$foundDrivers = $this->user_exists($email))
+		{
+			$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+
 		//Check that the information is correct.
-		
-		//Log the log in attempt if enabled.
+		if (!$user = Auth::instance()->validate_user($email, $userdata, $foundDrivers))
+		{
+			$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+
+		$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
 		
 		//return the user object and update the session.
+		\Session::set('user', $user);
+		
+		return $user;
 	}
-	
-	private function log_log_in_attempt($status)
+
+	private function log_log_in_attempt($status, $email)
 	{
 		
 	}
-	
+
+	/**
+	 * Returns an array of driver names that reconise the given email address. 
+	 * The array will be empty if the user is not reconised by any drivers.
+	 * 
+	 * @param string $email
+	 * @return array
+	 */
 	public function user_exists($email)
 	{
 		return Auth::instance()->user_exists($email);
 	}
-	
+
 	/**
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.
@@ -97,4 +117,7 @@ class Ethanol
 	//check permissions for user
 }
 
-class LogInFailed extends \Exception{}
+class LogInFailed extends \Exception
+{
+	
+}

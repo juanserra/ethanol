@@ -37,6 +37,15 @@ abstract class Auth_Driver
 	public abstract function has_user($email);
 	
 	/**
+	 * Attempts to validate a user's cradentials
+	 * 
+	 * @param string $email The email address of the user
+	 * @param string|array $userdata Any extra data that might be needed
+	 * @return false|Ethanol\Model_User
+	 */
+	public abstract function validate_user($email, $userdata);
+	
+	/**
 	 * Attempts to find a user by email address or returns a new (unsaved) user
 	 * object if not.
 	 * 

@@ -11,6 +11,9 @@ namespace Ethanol;
 class Model_User extends \Orm\Model
 {
 
+	public static $USER_ACTIVATED = '1';
+	public static $USER_INACTIVE  = '0';
+	
 	protected static $_table_name = 'users';
 	protected static $_properties = array(
 		'id',
@@ -20,7 +23,7 @@ class Model_User extends \Orm\Model
 			'default' => '0',
 		),
 		'activated' => array(
-			'default' => '0',
+			'default' => '',
 		),
 		'created_at',
 		'updated_at',
@@ -64,5 +67,10 @@ class Model_User extends \Orm\Model
 			'property' => 'updated_at',
 		),
 	);
+	
+	public static function _init()
+	{
+		static::$_properties['activated']['default'] = static::$USER_INACTIVE;
+	}
 
 }

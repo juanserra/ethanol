@@ -16,9 +16,12 @@ class Model_User extends \Orm\Model
 		'id',
 		'username',
 		'email',
-		'activation_key',
-		'last_login',
-		'activated',
+		'last_login' => array(
+			'default' => '0',
+		),
+		'activated' => array(
+			'default' => '0',
+		),
 		'created_at',
 		'updated_at',
 	);
@@ -27,6 +30,13 @@ class Model_User extends \Orm\Model
 		'meta' => array(
 			'key_from' => 'id',
 			'model_to' => 'Ethanol\Model_User_Meta',
+			'key_to' => 'user_id',
+			'cascade_delete' => true,
+		),
+		//Security
+		'security' => array(
+			'key_from' => 'id',
+			'model_to' => 'Ethanol\Model_User_Security',
 			'key_to' => 'user_id',
 			'cascade_delete' => true,
 		),
@@ -40,6 +50,18 @@ class Model_User extends \Orm\Model
 			'key_through_to' => 'group_id', // column 2 from the table in between, should match a users.id
 			'model_to' => 'Ethanol\Model_User_Group',
 			'key_to' => 'id',
+		),
+	);
+	protected static $_observers = array(
+		'Orm\Observer_CreatedAt' => array(
+			'events' => array('before_insert'),
+			'mysql_timestamp' => false,
+			'property' => 'created_at',
+		),
+		'Orm\Observer_UpdatedAt' => array(
+			'events' => array('before_save'),
+			'mysql_timestamp' => false,
+			'property' => 'updated_at',
 		),
 	);
 

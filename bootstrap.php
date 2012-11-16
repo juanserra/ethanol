@@ -19,8 +19,10 @@ Autoloader::add_classes(array(
 	'Ethanol\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',
 	'Ethanol\Auth_Driver_Database' => __DIR__.'/classes/auth/driver/database.php',
 	
+	//Various orm models
 	'Ethanol\Model_User'           => __DIR__.'/classes/model/user.php',
 	'Ethanol\Model_User_Meta'      => __DIR__.'/classes/model/user/meta.php',
+	'Ethanol\Model_User_Security'  => __DIR__.'/classes/model/user/security.php',
 	'Ethanol\Model_User_Group'     => __DIR__.'/classes/model/user/group.php',
 	'Ethanol\Model_Permission'     => __DIR__.'/classes/model/permission.php',
 ));

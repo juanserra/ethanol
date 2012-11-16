@@ -47,17 +47,21 @@ class Ethanol
 		$user->username = $username;
 		$user->email = $email;
 		
+		$security = new Model_User_Security;
+		$user->security = $security;
+		
 		//Generate a salt
-		$user->salt = Hasher::instance()->hash($email, Random::instance()->random());
-		$user->password = Hasher::instance()->hash($password, $user->salt);
+		$security->salt = Hasher::instance()->hash(\Date::time(), Random::instance()->random());
+		$security->password = Hasher::instance()->hash($password, $security->salt);
 		
 		if(\Config::get('ethanol.activate_emails', false))
 		{
 			$keyLength = \Config::get('ethanol.activation_key_length');
-			$user->activation_key = Random::instance()->random($keyLength);
+			$security->activation_hash = Random::instance()->random($keyLength);
+			$user->activated = 0;
 		}
 		
-		//$user->save();
+		$user->save();
 		return $user;
 	}
 	

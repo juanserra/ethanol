@@ -30,23 +30,31 @@ class Ethanol
 	}
 
 	//Log in
+	public function log_in($username, $password)
+	{
+		
+	}
 	//log out
 	//user exists
 
 	/**
-	 * Creates a new user
+	 * Creates a new user. If you wish to use emails as usernames then just pass
+	 * the email address as the username as well.
 	 * 
-	 * @param type $email
-	 * @param type $password
+	 * @param string $email
+	 * @param string $password
+	 * @param string $username Null if you want usernames to be the same as emails
+	 * 
 	 * @return Ethanol\Model_User The newly created user
+	 * 
 	 * @throws EmailSendingFailedException If there was aproblem sending the email. Check the email package for more info
 	 * @throws EmailValidationFailedException If there was an email validation problem. Check the email package for more info
 	 * @throws Ethanol\NoSuchActivationKey
 	 */
-	public function create_user($username, $email, $password)
+	public function create_user($email, $password, $username=null)
 	{
 		$user = new Model_User;
-		$user->username = $username;
+		$user->username = ($username == null)? $email : $username ;
 		$user->email = $email;
 
 		$security = new Model_User_Security;

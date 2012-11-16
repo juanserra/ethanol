@@ -12,12 +12,9 @@ class Auth_Driver_Database extends Auth_Driver
 
 	public function create_user($email, $userdata)
 	{
-		$username = \Arr::get($userdata, 'username', $email);
 		$password = \Arr::get($userdata, 'password');
 		
-		$user = new Model_User;
-		$user->username = ($username == null) ? $email : $username;
-		$user->email = $email;
+		$user = Auth_Driver::get_core_user($email);
 
 		$security = new Model_User_Security;
 

@@ -17,7 +17,6 @@ class Model_User extends \Orm\Model
 	protected static $_table_name = 'users';
 	protected static $_properties = array(
 		'id',
-		'username',
 		'email',
 		'last_login' => array(
 			'default' => '0',

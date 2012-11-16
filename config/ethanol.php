@@ -6,7 +6,7 @@ return array(
 	'default_auth_driver' => 'database',
 	
 	//Set to true to make users validate their email address before being able to log in
-	'activate_emails' => true,
+	'activate_emails' => false,
 	'activation_key_length' => 10,
 	//This is the location of the account activation controller
 	'activation_path' => 'ethanol/account/activate/:key',

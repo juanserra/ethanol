@@ -10,25 +10,26 @@ namespace Ethanol;
  */
 class Auth
 {
+
 	private static $instance = null;
 	private $driver_instances = array();
 	private $avaliable_drivers = array();
-	
+
 	public static function instance()
 	{
-		if(static::$instance == null)
+		if (static::$instance == null)
 		{
 			static::$instance = new static;
 		}
-		
+
 		return static::$instance;
 	}
-	
+
 	private function __construct()
 	{
 		;
 	}
-	
+
 	/**
 	 * Registers the given auth driver 
 	 * 
@@ -37,12 +38,12 @@ class Auth
 	public function register_driver($drivers)
 	{
 		$drivers = (array) $drivers;
-		foreach($drivers as $driver)
+		foreach ($drivers as $driver)
 		{
 			$this->avaliable_drivers[] = $driver;
 		}
 	}
-	
+
 	/**
 	 * Translates a driver name to a class name
 	 * 
@@ -51,9 +52,9 @@ class Auth
 	 */
 	public function translate_driver_name($name)
 	{
-		return 'Ethanol\Auth_Driver_'.\Inflector::words_to_upper($name);
+		return 'Ethanol\Auth_Driver_' . \Inflector::words_to_upper($name);
 	}
-	
+
 	/**
 	 * Gets an instance of the given driver name.
 	 * 
@@ -63,16 +64,16 @@ class Auth
 	private function get_driver($name)
 	{
 		$class = $this->translate_driver_name($name);
-		
+
 		//Check if there is already an instance of this class. If not create it
-		if(!$instance = \Arr::get($this->driver_instances, $class, false))
+		if (!$instance = \Arr::get($this->driver_instances, $class, false))
 		{
 			$instance = $this->driver_instances[$class] = new $class;
 		}
-		
+
 		return $instance;
 	}
-	
+
 	/**
 	 * Creates a user with the given driver
 	 * 
@@ -85,7 +86,7 @@ class Auth
 	{
 		return $this->get_driver($driver)->create_user($email, $userdata);
 	}
-	
+
 	/**
 	 * Activates the user with the given driver
 	 * 
@@ -97,7 +98,7 @@ class Auth
 	{
 		return $this->get_driver($driver)->activate_user($userdata);
 	}
-	
+
 	/**
 	 * Asks all drivers if a user exists with the given email and returns a list
 	 * of drivers that reconise the user.
@@ -106,19 +107,19 @@ class Auth
 	 * @return array 
 	 */
 	public function user_exists($email)
-	{	
+	{
 		$drivers = array();
-		foreach($this->avaliable_drivers as $driver)
+		foreach ($this->avaliable_drivers as $driver)
 		{
-			if($this->get_driver($driver)->has_user($email))
+			if ($this->get_driver($driver)->has_user($email))
 			{
 				$drivers[] = $driver;
 			}
 		}
-		
+
 		return $drivers;
 	}
-	
+
 	/**
 	 * Asks each of the given drivers if the passed user cradentials are valid.
 	 * 
@@ -129,14 +130,15 @@ class Auth
 	 */
 	public function validate_user($email, $userdata, $drivers)
 	{
-		foreach($drivers as $driver)
+		foreach ($drivers as $driver)
 		{
-			if($user = $this->get_driver($driver)->validate_user($email, $userdata))
+			if ($user = $this->get_driver($driver)->validate_user($email, $userdata))
 			{
 				return $user;
 			}
 		}
-		
+
 		return false;
 	}
+
 }

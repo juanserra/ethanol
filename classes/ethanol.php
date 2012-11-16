@@ -12,6 +12,8 @@ class Ethanol
 {
 
 	private static $instances = array();
+	private static $session_key = 'ethanol.user';
+	private static $guest_user_id = 0;
 	private $driver;
 
 	public static function instance($driver_name = null)
@@ -61,10 +63,10 @@ class Ethanol
 		}
 
 		$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
-		
+
 		//return the user object and update the session.
-		\Session::set('user', $user);
-		
+		\Session::set(static::$session_key, $user);
+
 		return $user;
 	}
 
@@ -109,6 +111,52 @@ class Ethanol
 	public function activate($userdata)
 	{
 		return Auth::instance()->activate_user($this->driver, $userdata);
+	}
+
+	/**
+	 * Gets the currently logged in user. Guests will be represented by a dummy
+	 * user object with 0 as the id.
+	 * 
+	 * @return Ethanol\Model_User
+	 */
+	public function current_user()
+	{
+		$user = \Session::get(static::$session_key, false);
+
+		if (!$user)
+		{
+			$user = $this->construct_guest_user();
+		}
+
+		return $user;
+	}
+
+	/**
+	 * Constructs a dummy guest user.
+	 * 
+	 * @return \Ethanol\Model_User
+	 */
+	private function construct_guest_user()
+	{
+		//TODO: Cache this.
+
+		$user = new Model_User;
+		$user->id = static::$guest_user_id;
+		$user->meta = new Model_User_Meta;
+
+		//TODO: Add guest groups + permissions
+
+		return $user;
+	}
+
+	/**
+	 * Returns true if a user is logged in
+	 * 
+	 * @return boolean
+	 */
+	public function logged_in()
+	{
+		return ($this->current_user()->id != static::$guest_user_id);
 	}
 
 	//get user info

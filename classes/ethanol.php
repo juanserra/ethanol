@@ -82,7 +82,7 @@ class Ethanol
 		$logEntry = new Model_Log_In_Attempt;
 		$logEntry->email = $email;
 		$logEntry->status = $status;
-		
+
 		$logEntry->save();
 	}
 
@@ -177,7 +177,7 @@ class Ethanol
 	{
 		\Session::set(static::$session_key, false);
 	}
-	
+
 	/**
 	 * Adds a user to the given group.
 	 * 
@@ -188,7 +188,7 @@ class Ethanol
 	{
 		
 	}
-	
+
 	/**
 	 * Removes a user from the given group
 	 * 
@@ -199,15 +199,15 @@ class Ethanol
 	{
 		
 	}
-	
+
 	/**
 	 * Get a list of all groups
 	 */
 	public function group_list()
 	{
-		
+		return Model_User_Group::find('all');
 	}
-	
+
 	/**
 	 * Adds a group.
 	 * 
@@ -219,17 +219,18 @@ class Ethanol
 		$group->name = $name;
 		$group->save();
 	}
-	
+
 	/**
 	 * Removes a group
 	 * 
-	 * @param type $name
+	 * @param int $group The identifier for the group to delete
 	 */
-	public function delete_group($name)
+	public function delete_group($group)
 	{
-		
+		$group = Model_User_Group::find($group);
+		$group->delete();
 	}
-	
+
 	//set group permissions
 	//check permissions for user
 }

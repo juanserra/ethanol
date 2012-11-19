@@ -3,7 +3,7 @@
 namespace Ethanol;
 
 /**
- * 
+ * Defines a log in attempt that has been logged in the database.
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -19,7 +19,7 @@ class Model_Log_In_Attempt extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'status',
-		'user_id',
+		'email',
 		'ip',
 		'time',
 	);
@@ -28,6 +28,9 @@ class Model_Log_In_Attempt extends \Orm\Model
 			'events' => array('before_insert'),
 			'mysql_timestamp' => false,
 			'property' => 'time',
+		),
+		'Ethanol\Observer_LogIp' => array(
+			'events' => array('before_insert'),
 		),
 	);
 

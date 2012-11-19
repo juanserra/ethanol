@@ -70,9 +70,20 @@ class Ethanol
 		return $user;
 	}
 
+	/**
+	 * Logs an attempt to log in in the database so things like the numner of
+	 * log in attempts can be recorded.
+	 * 
+	 * @param int $status One of $ATTEMPT_GOOD, $ATTEMPT_NO_SUCH_USER or $ATTEMPT_BAD_CRIDENTIALS from Model_Log_In_Attempt
+	 * @param string $email The email that's trying to log in.
+	 */
 	private function log_log_in_attempt($status, $email)
 	{
+		$logEntry = new Model_Log_In_Attempt;
+		$logEntry->email = $email;
+		$logEntry->status = $status;
 		
+		$logEntry->save();
 	}
 
 	/**

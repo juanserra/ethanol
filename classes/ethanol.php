@@ -208,7 +208,41 @@ class Ethanol
 	 */
 	public function set_user_groups($user, $groups)
 	{
+		if(is_int($user))
+		{
+			$user = $this->get_user($user);
+		}
 		
+		$groups = Model_User_Group::find('all', array(
+			'where' => array(
+				array('id', 'IN', $groups),
+			),
+		));
+		
+		//This is really messy. I should really find a better way to do this :<
+		unset($user->groups);
+		foreach($groups as $group)
+		{
+			$user->groups[] = $group;
+		}
+		$user->save();
+	}
+	
+	public function get_user($id)
+	{
+		$user = Model_User::find($id, array(
+			'related' => array(
+				'meta',
+				'groups',
+			)
+		));
+		
+		if(!$user)
+		{
+			throw new NoSuchUser(\Lang::get('ethanol.errors.noSuchUser'));
+		}
+		
+		return $user;
 	}
 	
 	/**
@@ -308,6 +342,11 @@ class LogInFailed extends \Exception
 }
 
 class GroupNotFound extends \Exception
+{
+	
+}
+
+class NoSuchUser extends \Exception
 {
 	
 }

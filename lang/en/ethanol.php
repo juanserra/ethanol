@@ -7,5 +7,6 @@ return array(
 		'alreadyDefined' => '":value" has already been defined for property: :property',
 		'groupNotFound' => 'The group could not be found',
 		'noUsers' => 'There are no users!',
+		'noSuchUser' => 'No such user exists',
 	),
 );

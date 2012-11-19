@@ -170,6 +170,14 @@ class Ethanol
 		return ($this->current_user()->id != static::$guest_user_id);
 	}
 
+	/**
+	 * Logs a user out
+	 */
+	public function log_out()
+	{
+		\Session::set(static::$session_key, false);
+	}
+	
 	//get user info
 	//set user groups
 	//set group permissions

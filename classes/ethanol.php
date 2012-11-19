@@ -212,6 +212,7 @@ class Ethanol
 	 * Adds a group.
 	 * 
 	 * @param string $name
+	 * @throws Ethanol\ColumnNotUnique If the name is taken
 	 */
 	public function add_group($name)
 	{
@@ -227,8 +228,45 @@ class Ethanol
 	 */
 	public function delete_group($group)
 	{
-		$group = Model_User_Group::find($group);
+		$group = $this->get_group($group);
 		$group->delete();
+	}
+	
+	/**
+	 * Gets information on a single group
+	 * 
+	 * @param int $id ID of the group to get
+	 * @return Ethanol\Model_User_Group if a group is found
+	 * @throws Ethanol\GroupNotFound if the group could not be found.
+	 */
+	public function get_group($id)
+	{
+		$group = Model_User_Group::find($id);
+		
+		if(!$group)
+		{
+			throw new GroupNotFound(\Lang::get('ethanol.errors.groupNotFound'));
+		}
+		
+		return $group;
+	}
+	
+	/**
+	 * Allows a group to be updated.
+	 * 
+	 * @param int|Model_User_Group $group If an ID is given the group will be loaded
+	 * @param string $name The new name for the group
+	 * @throws Ethanol\ColumnNotUnique If the name is taken
+	 */
+	public function update_group($group, $name)
+	{
+		if(is_int($group))
+		{
+			$group = $this->get_group($group);
+		}
+		
+		$group->name = $name;
+		$group->save();
 	}
 
 	//set group permissions
@@ -236,6 +274,11 @@ class Ethanol
 }
 
 class LogInFailed extends \Exception
+{
+	
+}
+
+class GroupNotFound extends \Exception
 {
 	
 }

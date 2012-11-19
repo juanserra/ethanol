@@ -5,5 +5,6 @@ return array(
 		'userAlreadyActive' => 'The user has already been activated',
 		'loginInvalid' => 'The specified login is invalid',
 		'alreadyDefined' => '":value" has already been defined for property: :property',
+		'groupNotFound' => 'The group could not be found',
 	),
 );

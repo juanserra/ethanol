@@ -206,6 +206,13 @@ class Ethanol
 		$user->save();
 	}
 	
+	/**
+	 * Gets a single user based on the ID
+	 * 
+	 * @param int $id
+	 * @return Ethanol\Model_User
+	 * @throws NoSuchUser If the user cannot be found
+	 */
 	public function get_user($id)
 	{
 		$user = Model_User::find($id, array(

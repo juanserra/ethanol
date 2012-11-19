@@ -177,28 +177,6 @@ class Ethanol
 	{
 		\Session::set(static::$session_key, false);
 	}
-
-	/**
-	 * Adds a user to the given group.
-	 * 
-	 * @param type $user
-	 * @param type $group
-	 */
-	public function add_user_togroup($user, $group)
-	{
-		
-	}
-
-	/**
-	 * Removes a user from the given group
-	 * 
-	 * @param type $user
-	 * @param type $group
-	 */
-	public function remove_user_from_group($user, $group)
-	{
-		
-	}
 	
 	/**
 	 * Sets the groups for the given user

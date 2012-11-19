@@ -178,8 +178,58 @@ class Ethanol
 		\Session::set(static::$session_key, false);
 	}
 	
-	//get user info
-	//set user groups
+	/**
+	 * Adds a user to the given group.
+	 * 
+	 * @param type $user
+	 * @param type $group
+	 */
+	public function add_user_togroup($user, $group)
+	{
+		
+	}
+	
+	/**
+	 * Removes a user from the given group
+	 * 
+	 * @param type $user
+	 * @param type $group
+	 */
+	public function remove_user_from_group($user, $group)
+	{
+		
+	}
+	
+	/**
+	 * Get a list of all groups
+	 */
+	public function group_list()
+	{
+		
+	}
+	
+	/**
+	 * Adds a group.
+	 * 
+	 * @param string $name
+	 */
+	public function add_group($name)
+	{
+		$group = new Model_User_Group;
+		$group->name = $name;
+		$group->save();
+	}
+	
+	/**
+	 * Removes a group
+	 * 
+	 * @param type $name
+	 */
+	public function delete_group($name)
+	{
+		
+	}
+	
 	//set group permissions
 	//check permissions for user
 }

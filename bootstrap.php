@@ -28,6 +28,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Model_Permission'     => __DIR__.'/classes/model/permission.php',
 	'Ethanol\Model_Log_In_Attempt' => __DIR__.'/classes/model/log/in/attempt.php',
 	'Ethanol\Observer_LogIp'	   => __DIR__.'/classes/observer/logip.php',
+	'Ethanol\Observer_Unique'	   => __DIR__.'/classes/observer/unique.php',
 ));
 
 Ethanol\Auth::instance()->register_driver('database');

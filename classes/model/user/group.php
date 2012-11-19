@@ -3,7 +3,7 @@
 namespace Ethanol;
 
 /**
- * 
+ * Defines a group of users in the database.
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -34,6 +34,12 @@ class Model_User_Group extends \Orm\Model
 			'key_through_to' => 'permission_id', // column 2 from the table in between, should match a users.id
 			'model_to' => 'Ethanol\Model_Permission',
 			'key_to' => 'id',
+		),
+	);
+	protected static $_observers = array(
+		'Ethanol\Observer_Unique' => array(
+			'events' => array('before_save'),
+			'property' => 'name',
 		),
 	);
 

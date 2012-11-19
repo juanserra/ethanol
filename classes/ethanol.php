@@ -82,7 +82,7 @@ class Ethanol
 		$logEntry = new Model_Log_In_Attempt;
 		$logEntry->email = $email;
 		$logEntry->status = $status;
-		
+
 		$logEntry->save();
 	}
 
@@ -178,13 +178,160 @@ class Ethanol
 		\Session::set(static::$session_key, false);
 	}
 	
-	//get user info
-	//set user groups
-	//set group permissions
-	//check permissions for user
+	/**
+	 * Sets the groups for the given user
+	 * 
+	 * @param int|Ethanol\Model_User $user The user to modify
+	 * @param array(int) $groups The groups to set
+	 */
+	public function set_user_groups($user, $groups)
+	{
+		if(is_int($user))
+		{
+			$user = $this->get_user($user);
+		}
+		
+		$groups = Model_User_Group::find('all', array(
+			'where' => array(
+				array('id', 'IN', $groups),
+			),
+		));
+		
+		//This is really messy. I should really find a better way to do this :<
+		unset($user->groups);
+		foreach($groups as $group)
+		{
+			$user->groups[] = $group;
+		}
+		$user->save();
+	}
+	
+	/**
+	 * Gets a single user based on the ID
+	 * 
+	 * @param int $id
+	 * @return Ethanol\Model_User
+	 * @throws NoSuchUser If the user cannot be found
+	 */
+	public function get_user($id)
+	{
+		$user = Model_User::find($id, array(
+			'related' => array(
+				'meta',
+				'groups',
+			)
+		));
+		
+		if(!$user)
+		{
+			throw new NoSuchUser(\Lang::get('ethanol.errors.noSuchUser'));
+		}
+		
+		return $user;
+	}
+	
+	/**
+	 * Gets a list of all registered users.
+	 */
+	public function get_users()
+	{
+		$users = Model_User::find('all', array(
+			'related' => array(
+				'groups',
+				'meta',
+			),
+		));
+		
+		if(count($users) == 0)
+		{
+			throw new NoUsers(\Lang::get('ethanol.errors.noUsers'));
+		}
+		
+		return $users;
+	}
+
+	/**
+	 * Get a list of all groups
+	 */
+	public function group_list()
+	{
+		return Model_User_Group::find('all');
+	}
+
+	/**
+	 * Adds a group.
+	 * 
+	 * @param string $name
+	 * @throws Ethanol\ColumnNotUnique If the name is taken
+	 */
+	public function add_group($name)
+	{
+		$group = new Model_User_Group;
+		$group->name = $name;
+		$group->save();
+	}
+
+	/**
+	 * Removes a group
+	 * 
+	 * @param int $group The identifier for the group to delete
+	 */
+	public function delete_group($group)
+	{
+		$group = $this->get_group($group);
+		$group->delete();
+	}
+	
+	/**
+	 * Gets information on a single group
+	 * 
+	 * @param int $id ID of the group to get
+	 * @return Ethanol\Model_User_Group if a group is found
+	 * @throws Ethanol\GroupNotFound if the group could not be found.
+	 */
+	public function get_group($id)
+	{
+		$group = Model_User_Group::find($id);
+		
+		if(!$group)
+		{
+			throw new GroupNotFound(\Lang::get('ethanol.errors.groupNotFound'));
+		}
+		
+		return $group;
+	}
+	
+	/**
+	 * Allows a group to be updated.
+	 * 
+	 * @param int|Model_User_Group $group If an ID is given the group will be loaded
+	 * @param string $name The new name for the group
+	 * @throws Ethanol\ColumnNotUnique If the name is taken
+	 */
+	public function update_group($group, $name)
+	{
+		if(is_int($group))
+		{
+			$group = $this->get_group($group);
+		}
+		
+		$group->name = $name;
+		$group->save();
+	}
+
 }
 
 class LogInFailed extends \Exception
+{
+	
+}
+
+class GroupNotFound extends \Exception
+{
+	
+}
+
+class NoSuchUser extends \Exception
 {
 	
 }

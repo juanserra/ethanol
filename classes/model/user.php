@@ -3,7 +3,8 @@
 namespace Ethanol;
 
 /**
- * 
+ * Defines a user within the system. Users can have many accounts. (Such as
+ * one registered in the database, facebook, twitter...)
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -12,15 +13,12 @@ class Model_User extends \Orm\Model
 {
 
 	public static $USER_ACTIVATED = '1';
-	public static $USER_INACTIVE  = '0';
+	public static $USER_INACTIVE = '0';
 	
 	protected static $_table_name = 'users';
 	protected static $_properties = array(
 		'id',
 		'email',
-		'last_login' => array(
-			'default' => '0',
-		),
 		'activated' => array(
 			'default' => '',
 		),
@@ -66,7 +64,7 @@ class Model_User extends \Orm\Model
 			'property' => 'updated_at',
 		),
 	);
-	
+
 	public static function _init()
 	{
 		static::$_properties['activated']['default'] = static::$USER_INACTIVE;

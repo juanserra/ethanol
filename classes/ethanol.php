@@ -199,6 +199,37 @@ class Ethanol
 	{
 		
 	}
+	
+	/**
+	 * Sets the groups for the given user
+	 * 
+	 * @param int|Ethanol\Model_User $user The user to modify
+	 * @param array(int) $groups The groups to set
+	 */
+	public function set_user_groups($user, $groups)
+	{
+		
+	}
+	
+	/**
+	 * Gets a list of all registered users.
+	 */
+	public function get_users()
+	{
+		$users = Model_User::find('all', array(
+			'related' => array(
+				'groups',
+				'meta',
+			),
+		));
+		
+		if(count($users) == 0)
+		{
+			throw new NoUsers(\Lang::get('ethanol.errors.noUsers'));
+		}
+		
+		return $users;
+	}
 
 	/**
 	 * Get a list of all groups
@@ -269,8 +300,6 @@ class Ethanol
 		$group->save();
 	}
 
-	//set group permissions
-	//check permissions for user
 }
 
 class LogInFailed extends \Exception

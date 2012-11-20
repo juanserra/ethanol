@@ -34,6 +34,9 @@ app config file to ensure Ethanol is loaded.
 You then want to run the ethanol.sql file to create the needed database tables.
 There will eventually be a migration for this.
 
+If you wish to use email activation on accounts then you must also ensure the
+email package is set up correctly.
+
 Usage
 =====
 

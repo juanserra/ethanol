@@ -372,8 +372,7 @@ class Ethanol
 
 		if (is_numeric($permission))
 		{
-			unset($group->permissions[$permission]);
-			$group->save();
+			$group->permissions[$permission]->delete();
 			return;
 		}
 
@@ -381,8 +380,7 @@ class Ethanol
 		{
 			if ($groupPermission->identifier == $permission)
 			{
-				unset($group->permissions[$groupPermission->id]);
-				$group->save();
+				$group->permissions[$groupPermission->id]->delete();
 				return;
 			}
 		}
@@ -392,9 +390,10 @@ class Ethanol
 	 * Checks if the given group has the given permission
 	 * 
 	 * @param Ethanol\Model_User_Group|int $group
-	 * @param bollean $permission True if the group has the permission
+	 * @param string $toCheck
+	 * @return boolean True if the group has the permission
 	 */
-	public function group_has_permission($group, $permission)
+	public function group_has_permission($group, $toCheck)
 	{
 		if (is_numeric($group))
 		{
@@ -403,12 +402,11 @@ class Ethanol
 
 		foreach ($group->permissions as $groupPermission)
 		{
-			//if $permission length > $groupPermission
-			// if $groupPermission starts with $permission
-			//has access
-			//if $permission length < $groupPermission
-			//if $permission starts with $groupPermission
-			//has access
+			if (\Str::starts_with($groupPermission->identifier, $toCheck) ||
+				\Str::starts_with($toCheck, $groupPermission->identifier))
+			{
+				return true;
+			}
 		}
 
 		return false;

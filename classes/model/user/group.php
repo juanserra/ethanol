@@ -33,6 +33,7 @@ class Model_User_Group extends \Orm\Model
 			'key_from' => 'id',
 			'model_to' => 'Ethanol\Model_Permission',
 			'key_to' => 'group_id',
+			'cascade_delete' => true,
 		),
 	);
 	protected static $_observers = array(

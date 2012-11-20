@@ -179,7 +179,7 @@ class Ethanol
 	{
 		\Session::set(static::$session_key, false);
 	}
-	
+
 	/**
 	 * Sets the groups for the given user
 	 * 
@@ -188,26 +188,26 @@ class Ethanol
 	 */
 	public function set_user_groups($user, $groups)
 	{
-		if(is_int($user))
+		if (is_numeric($user))
 		{
 			$user = $this->get_user($user);
 		}
-		
+
 		$groups = Model_User_Group::find('all', array(
-			'where' => array(
-				array('id', 'IN', $groups),
-			),
-		));
-		
+				'where' => array(
+					array('id', 'IN', $groups),
+				),
+			));
+
 		//This is really messy. I should really find a better way to do this :<
 		unset($user->groups);
-		foreach($groups as $group)
+		foreach ($groups as $group)
 		{
 			$user->groups[] = $group;
 		}
 		$user->save();
 	}
-	
+
 	/**
 	 * Gets a single user based on the ID
 	 * 
@@ -218,37 +218,37 @@ class Ethanol
 	public function get_user($id)
 	{
 		$user = Model_User::find($id, array(
-			'related' => array(
-				'meta',
-				'groups',
-			)
-		));
-		
-		if(!$user)
+				'related' => array(
+					'meta',
+					'groups',
+				)
+			));
+
+		if (!$user)
 		{
 			throw new NoSuchUser(\Lang::get('ethanol.errors.noSuchUser'));
 		}
-		
+
 		return $user;
 	}
-	
+
 	/**
 	 * Gets a list of all registered users.
 	 */
 	public function get_users()
 	{
 		$users = Model_User::find('all', array(
-			'related' => array(
-				'groups',
-				'meta',
-			),
-		));
-		
-		if(count($users) == 0)
+				'related' => array(
+					'groups',
+					'meta',
+				),
+			));
+
+		if (count($users) == 0)
 		{
 			throw new NoUsers(\Lang::get('ethanol.errors.noUsers'));
 		}
-		
+
 		return $users;
 	}
 
@@ -283,7 +283,7 @@ class Ethanol
 		$group = $this->get_group($group);
 		$group->delete();
 	}
-	
+
 	/**
 	 * Gets information on a single group
 	 * 
@@ -294,19 +294,19 @@ class Ethanol
 	public function get_group($id)
 	{
 		$group = Model_User_Group::find($id, array(
-			'related' => array(
-				'permissions',
-			),
-		));
-		
-		if(!$group)
+				'related' => array(
+					'permissions',
+				),
+			));
+
+		if (!$group)
 		{
 			throw new GroupNotFound(\Lang::get('ethanol.errors.groupNotFound'));
 		}
-		
+
 		return $group;
 	}
-	
+
 	/**
 	 * Allows a group to be updated.
 	 * 
@@ -316,15 +316,15 @@ class Ethanol
 	 */
 	public function update_group($group, $name)
 	{
-		if(is_int($group))
+		if (is_numeric($group))
 		{
 			$group = $this->get_group($group);
 		}
-		
+
 		$group->name = $name;
 		$group->save();
 	}
-	
+
 	/**
 	 * Adds a permission to the given group. If the permission has already
 	 * been assigned nothing happens.
@@ -334,34 +334,60 @@ class Ethanol
 	 */
 	public function add_group_permission($group, $permission)
 	{
-		if(is_numeric($group))
+		if (is_numeric($group))
 		{
 			$group = $this->get_group($group);
 		}
-		
+
 		//Check that the permission does not exist already.
-		foreach($group->permissions as $groupPermission)
+		foreach ($group->permissions as $groupPermission)
 		{
-			if($groupPermission->identifier == $permission)
+			if ($groupPermission->identifier == $permission)
 			{
 				//Permission has already been added so don't add it again.
 				return;
 			}
 		}
-		
+
 		//add the permission
 		$permissionModel = new Model_Permission;
 		$permissionModel->identifier = $permission;
-		
+
 		$group->permissions[] = $permissionModel;
 		$group->save();
 	}
-	
+
+	/**
+	 * Removes a permission from the given group
+	 * 
+	 * @param Ethanol\Model_User_Group|int $group Group to remove the permission from
+	 * @param string|int $permission Can either be an id or a string identifier (eg, 'admin.blog.edit')
+	 */
 	public function remove_group_permission($group, $permission)
 	{
-		
+		if (is_numeric($group))
+		{
+			$group = $this->get_group($group);
+		}
+
+		if (is_numeric($permission))
+		{
+			unset($group->permissions[$permission]);
+			$group->save();
+			return;
+		}
+
+		foreach ($group->permissions as $groupPermission)
+		{
+			if ($groupPermission->identifier == $permission)
+			{
+				unset($group->permissions[$groupPermission->id]);
+				$group->save();
+				return;
+			}
+		}
 	}
-	
+
 	/**
 	 * Checks if the given group has the given permission
 	 * 
@@ -370,21 +396,21 @@ class Ethanol
 	 */
 	public function group_has_permission($group, $permission)
 	{
-		if(is_numeric($group))
+		if (is_numeric($group))
 		{
 			$group = $this->get_group($group);
 		}
-		
-		foreach($group->permissions as $groupPermission)
+
+		foreach ($group->permissions as $groupPermission)
 		{
 			//if $permission length > $groupPermission
-				// if $groupPermission starts with $permission
-				//has access
+			// if $groupPermission starts with $permission
+			//has access
 			//if $permission length < $groupPermission
-				//if $permission starts with $groupPermission
-				//has access
+			//if $permission starts with $groupPermission
+			//has access
 		}
-		
+
 		return false;
 	}
 
@@ -397,7 +423,7 @@ class Ethanol
 	{
 		return \Config::get('ethanol_permissions');
 	}
-	
+
 	/**
 	 * Returns a list of permissions that can be used as options for a select
 	 */
@@ -407,7 +433,7 @@ class Ethanol
 		sort($list);
 		return array_combine($list, $list);
 	}
-	
+
 	/**
 	 * Recursivly builds a list of permsssions as a dot notated list of keys
 	 * 
@@ -415,19 +441,20 @@ class Ethanol
 	 * @param type $prefix
 	 * @return type
 	 */
-	private function recursive_permission_select($permissions, $prefix='')
+	private function recursive_permission_select($permissions, $prefix = '')
 	{
 		$array = array();
-		foreach($permissions as $perm => $children)
+		foreach ($permissions as $perm => $children)
 		{
-			$name = $prefix.$perm;
+			$name = $prefix . $perm;
 			$array[$name] = $name;
-			
-			$array += $this->recursive_permission_select($children, $prefix.$perm.'.');
+
+			$array += $this->recursive_permission_select($children, $prefix . $perm . '.');
 		}
-		
+
 		return $array;
 	}
+
 }
 
 class LogInFailed extends \Exception

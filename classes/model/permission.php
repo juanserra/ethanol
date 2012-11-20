@@ -3,7 +3,7 @@
 namespace Ethanol;
 
 /**
- * 
+ * Defines a single permission for a group.
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD

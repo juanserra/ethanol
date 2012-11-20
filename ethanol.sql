@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 19, 2012 at 10:25 AM
+-- Generation Time: Nov 20, 2012 at 01:47 PM
 -- Server version: 5.1.63
 -- PHP Version: 5.3.3-7+squeeze14
 
@@ -22,18 +22,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groups_permissions`
---
-
-CREATE TABLE IF NOT EXISTS `groups_permissions` (
-  `group_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`group_id`,`permission_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `groups_users`
 --
 
@@ -42,6 +30,19 @@ CREATE TABLE IF NOT EXISTS `groups_users` (
   `group_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `group_permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `group_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(100) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -56,22 +57,7 @@ CREATE TABLE IF NOT EXISTS `log_in_attempt` (
   `ip` varchar(100) NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `permissions`
---
-
-CREATE TABLE IF NOT EXISTS `permissions` (
-  `id` varchar(100) NOT NULL,
-  `identifier` varchar(100) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `identifier` (`identifier`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -86,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` int(11) NOT NULL DEFAULT '0',
   `updated_at` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -98,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -110,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `user_metadata` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -125,4 +111,4 @@ CREATE TABLE IF NOT EXISTS `user_security` (
   `salt` varchar(100) NOT NULL,
   `activation_hash` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;

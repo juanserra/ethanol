@@ -411,29 +411,33 @@ class Ethanol
 
 		return false;
 	}
-	
+
 	/**
 	 * Checks if a user has the given permission
 	 * 
-	 * @param Ethanol\Model_User|int $user
 	 * @param string $toCheck
+	 * @param Ethanol\Model_User|int|null $user If null the current user will be used
 	 * @return boolean True if the user has the permission
 	 */
-	public function user_has_permission($user, $toCheck)
+	public function user_has_permission($toCheck, $user = null)
 	{
-		if(is_numeric($user))
+		if ($user == null)
+		{
+			$user = $this->current_user();
+		}
+		else if (is_numeric($user))
 		{
 			$user = $this->get_user($user);
 		}
-		
-		foreach($user->groups as $group)
+
+		foreach ($user->groups as $group)
 		{
-			if($this->group_has_permission($group, $toCheck))
+			if ($this->group_has_permission($group, $toCheck))
 			{
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

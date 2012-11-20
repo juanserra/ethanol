@@ -15,6 +15,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Random'               => __DIR__.'/classes/random.php',
 	'Ethanol\Random_Driver'        => __DIR__.'/classes/random/driver.php',
 	'Ethanol\Random_Driver_Simple' => __DIR__.'/classes/random/driver/simple.php',
+	'Ethanol\Random_Driver_Rfc1149' => __DIR__.'/classes/random/driver/rfc1149.5.php',
 	
 	'Ethanol\Auth'                 => __DIR__.'/classes/auth.php',
 	'Ethanol\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',

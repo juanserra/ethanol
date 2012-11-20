@@ -26,14 +26,14 @@ class Model_User_Group extends \Orm\Model
 			'model_to' => 'Ethanol\Model_User',
 			'key_to' => 'id',
 		),
+	);
+	protected static $_has_many = array(
 		//Permissions
 		'permissions' => array(
 			'key_from' => 'id',
-			'key_through_from' => 'group_id', // column 1 from the table in between, should match a posts.id
-			'table_through' => 'groups_permissions', // both models plural without prefix in alphabetical order
-			'key_through_to' => 'permission_id', // column 2 from the table in between, should match a users.id
 			'model_to' => 'Ethanol\Model_Permission',
-			'key_to' => 'id',
+			'key_to' => 'group_id',
+			'cascade_delete' => true,
 		),
 	);
 	protected static $_observers = array(

@@ -31,7 +31,9 @@ class Ethanol
 
 	public static function _init()
 	{
+		//TODO: unhardcode these names
 		\Config::load('ethanol', true);
+		\Config::load('ethanol_permissions', true);
 		\Lang::load('ethanol', 'ethanol');
 	}
 
@@ -319,6 +321,41 @@ class Ethanol
 		$group->save();
 	}
 
+	public function get_all_permissions()
+	{
+		return \Config::get('ethanol_permissions');
+	}
+	
+	/**
+	 * Returns a list of permissions that can be used as options for a select
+	 */
+	public function get_permission_select()
+	{
+		$list = $this->recursive_permission_select(\Config::get('ethanol_permissions'));
+		sort($list);
+		return array_combine($list, $list);
+	}
+	
+	/**
+	 * Recursivly builds a list of permsssions as a dot notated list of keys
+	 * 
+	 * @param type $permissions
+	 * @param type $prefix
+	 * @return type
+	 */
+	private function recursive_permission_select($permissions, $prefix='')
+	{
+		$array = array();
+		foreach($permissions as $perm => $children)
+		{
+			$name = $prefix.$perm;
+			$array[$name] = $name;
+			
+			$array += $this->recursive_permission_select($children, $prefix.$perm.'.');
+		}
+		
+		return $array;
+	}
 }
 
 class LogInFailed extends \Exception

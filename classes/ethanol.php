@@ -293,7 +293,11 @@ class Ethanol
 	 */
 	public function get_group($id)
 	{
-		$group = Model_User_Group::find($id);
+		$group = Model_User_Group::find($id, array(
+			'related' => array(
+				'permissions',
+			),
+		));
 		
 		if(!$group)
 		{
@@ -320,7 +324,75 @@ class Ethanol
 		$group->name = $name;
 		$group->save();
 	}
+	
+	/**
+	 * Adds a permission to the given group. If the permission has already
+	 * been assigned nothing happens.
+	 * 
+	 * @param Ethanol\Model_User_Group|int $group
+	 * @param string $permission
+	 */
+	public function add_group_permission($group, $permission)
+	{
+		if(is_numeric($group))
+		{
+			$group = $this->get_group($group);
+		}
+		
+		//Check that the permission does not exist already.
+		foreach($group->permissions as $groupPermission)
+		{
+			if($groupPermission->identifier == $permission)
+			{
+				//Permission has already been added so don't add it again.
+				return;
+			}
+		}
+		
+		//add the permission
+		$permissionModel = new Model_Permission;
+		$permissionModel->identifier = $permission;
+		
+		$group->permissions[] = $permissionModel;
+		$group->save();
+	}
+	
+	public function remove_group_permission($group, $permission)
+	{
+		
+	}
+	
+	/**
+	 * Checks if the given group has the given permission
+	 * 
+	 * @param Ethanol\Model_User_Group|int $group
+	 * @param bollean $permission True if the group has the permission
+	 */
+	public function group_has_permission($group, $permission)
+	{
+		if(is_numeric($group))
+		{
+			$group = $this->get_group($group);
+		}
+		
+		foreach($group->permissions as $groupPermission)
+		{
+			//if $permission length > $groupPermission
+				// if $groupPermission starts with $permission
+				//has access
+			//if $permission length < $groupPermission
+				//if $permission starts with $groupPermission
+				//has access
+		}
+		
+		return false;
+	}
 
+	/**
+	 * Retuns an array of all permissions registered.
+	 * 
+	 * @return array
+	 */
 	public function get_all_permissions()
 	{
 		return \Config::get('ethanol_permissions');

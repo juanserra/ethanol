@@ -101,8 +101,15 @@ class Auth_Driver_Database extends Auth_Driver
 
 	public function validate_user($email, $userdata)
 	{
-		$user = Model_User::find_by_email($email, array('related' => array('security')));
-		
+		$user = Model_User::find('first', array(
+			'related' => array(
+				'security',
+			),
+			'where' => array(
+				array('email', $email),
+			),
+		));
+
 		$password = \Arr::get($userdata, 'password');
 
 		//Hash the given password and check that against the user
@@ -113,7 +120,7 @@ class Auth_Driver_Database extends Auth_Driver
 			unset($user->security);
 			return $user;
 		}
-		
+
 		return false;
 	}
 

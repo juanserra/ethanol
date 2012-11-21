@@ -2,6 +2,12 @@
 
 namespace Fuel\Tasks;
 
+/**
+ * Generates random log in logs for testing
+ * 
+ * @author Steve "uru" West <uruwolf@gmail.com>
+ * @license http://philsturgeon.co.uk/code/dbad-license DbaD
+ */
 class TestData
 {
 	public function run()

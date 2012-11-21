@@ -10,24 +10,24 @@ namespace Ethanol;
  */
 class Logger
 {
-	
+
 	private static $instance = null;
-	
+
 	public static function instance()
 	{
-		if(static::$instance == null)
+		if (static::$instance == null)
 		{
 			static::$instance = new static;
 		}
-		
+
 		return static::$instance;
 	}
-	
+
 	private function __construct()
 	{
 		;
 	}
-	
+
 	/**
 	 * Logs an attempt to log in in the database so things like the numner of
 	 * log in attempts can be recorded.
@@ -37,13 +37,22 @@ class Logger
 	 */
 	public function log_log_in_attempt($status, $email)
 	{
+		if (!$this->logging_enabled())
+		{
+			return;
+		}
 		$logEntry = new Model_Log_In_Attempt;
 		$logEntry->email = $email;
 		$logEntry->status = $status;
 
 		$logEntry->save();
 	}
-	
+
+	public function logging_enabled()
+	{
+		return \Config::get('ethanol.log_log_in_attempts');
+	}
+
 	/**
 	 * Returns true unless the email or IP trying to log in has been blocked
 	 * for some reason.
@@ -53,6 +62,22 @@ class Logger
 	 */
 	public function can_log_in($email)
 	{
+		//Check the number of log in attempts for this user and this ip
+		$lastGood = Model_Log_In_Attempt::query()
+			->select('time')
+			->where('status', Model_Log_In_Attempt::$ATTEMPT_GOOD)
+			->order_by('time', 'DESC')
+			->limit(1);
+
+		$attempts = Model_Log_In_Attempt::query()
+			->where('time', '>', $lastGood->get_query(false))
+			->get();
+		
+		echo '<pre>';
+		print_r($attempts);
+		exit;
+
 		return true;
 	}
+
 }

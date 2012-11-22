@@ -470,6 +470,18 @@ class Ethanol
 
 		return $array;
 	}
+	
+	/**
+	 * Bans an email address and/or an ip for the given time
+	 * 
+	 * @param string|int $time Number of seconds to ban for or something like "+1 Day"
+	 * @param null|string|true $ip Null to ignore IP, string to specify the ip, true to automatically load the ip
+	 * @param null|string $email
+	 */
+	public function ban($time, $ip=null, $email=null)
+	{
+		Banner::instance()->ban($time, $ip, $email);
+	}
 
 }
 

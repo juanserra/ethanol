@@ -57,7 +57,7 @@ class Banner
 	 * 
 	 * @param string|int $time Takes a string, "+1 day", or a number of seconds
 	 * @param null|string|true $ip Null to ignore IP, string to specify the ip, true to automatically load the ip
-	 * @param null|string $email 
+	 * @param null|string $email
 	 */
 	public function ban($time, $ip = null, $email = null)
 	{

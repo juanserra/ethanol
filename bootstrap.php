@@ -23,7 +23,8 @@ Autoloader::add_classes(array(
 	'Ethanol\Auth_Driver_Database' => __DIR__.'/classes/auth/driver/database.php',
 	
 	//Logging related classes
-	'Ethanol\Logger'                       => __DIR__.'/classes/logger.php',
+	'Ethanol\Logger'               => __DIR__.'/classes/logger.php',
+	'Ethanol\Banner'               => __DIR__.'/classes/banner.php',
 	
 	//Various orm models
 	'Ethanol\Model_User'           => __DIR__.'/classes/model/user.php',
@@ -32,6 +33,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Model_User_Group'     => __DIR__.'/classes/model/user/group.php',
 	'Ethanol\Model_Permission'     => __DIR__.'/classes/model/permission.php',
 	'Ethanol\Model_Log_In_Attempt' => __DIR__.'/classes/model/log/in/attempt.php',
+	'Ethanol\Model_Ban'            => __DIR__.'/classes/model/ban.php',
 	'Ethanol\Observer_LogIp'	   => __DIR__.'/classes/observer/logip.php',
 	'Ethanol\Observer_Unique'	   => __DIR__.'/classes/observer/unique.php',
 ));

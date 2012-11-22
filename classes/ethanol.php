@@ -50,7 +50,7 @@ class Ethanol
 	 */
 	public function log_in($email, $userdata)
 	{
-		if(!Logger::instance()->can_log_in($email))
+		if(Banner::instance()->is_banned($email))
 		{
 			throw new LogInFailed(\Lang::get('ethanol.errors.exceededLoginTries'));
 		}

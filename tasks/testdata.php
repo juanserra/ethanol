@@ -26,14 +26,15 @@ class TestData
 		$total = rand(25,50);
 		for($i=0; $i<=$total; $i++)
 		{
+			$status = $probs[rand(0,count($probs)-1)];
 			$model = new \Ethanol\Model_Log_In_Attempt;
-			$model->status = $probs[rand(0,count($probs)-1)];
-			$model->email = 'test';
+			$model->status = $status;
+			$model->email = 'test@test.com';
 			$model->save();
 			$model->time = $time;
 			$model->save();
 			
-			echo "Creating: $i/$total\n";
+			echo "Creating:$status $i/$total\n";
 			$time -= rand(500, 2000);
 		}
 	}

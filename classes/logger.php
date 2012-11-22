@@ -46,38 +46,22 @@ class Logger
 		$logEntry->status = $status;
 
 		$logEntry->save();
-	}
-
-	public function logging_enabled()
-	{
-		return \Config::get('ethanol.log_log_in_attempts');
+		
+		//If the entry failed then add a ban too
+		if($status != Model_Log_In_Attempt::$ATTEMPT_GOOD)
+		{
+			Banner::instance()->auto_ban($email);
+		}
 	}
 
 	/**
-	 * Returns true unless the email or IP trying to log in has been blocked
-	 * for some reason.
+	 * Returns the status of the log_log_in_attempts config entry
 	 * 
-	 * @param type $email
 	 * @return boolean
 	 */
-	public function can_log_in($email)
+	public function logging_enabled()
 	{
-		//Check the number of log in attempts for this user and this ip
-		$lastGood = Model_Log_In_Attempt::query()
-			->select('time')
-			->where('status', Model_Log_In_Attempt::$ATTEMPT_GOOD)
-			->order_by('time', 'DESC')
-			->limit(1);
-
-		$attempts = Model_Log_In_Attempt::query()
-			->where('time', '>', $lastGood->get_query(false))
-			->get();
-		
-		echo '<pre>';
-		print_r($attempts);
-		exit;
-
-		return true;
+		return \Config::get('ethanol.log_log_in_attempts');
 	}
 
 }

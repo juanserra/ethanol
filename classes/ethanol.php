@@ -101,6 +101,11 @@ class Ethanol
 	 */
 	public function create_user($email, $userdata)
 	{
+		if(count($this->user_exists($email)) > 0)
+		{
+			throw new UserExists(\Lang::get('ethanol.errors.userExists'));
+		}
+		
 		return Auth::instance()->create_user($this->driver, $email, $userdata);
 	}
 
@@ -496,6 +501,11 @@ class GroupNotFound extends \Exception
 }
 
 class NoSuchUser extends \Exception
+{
+	
+}
+
+class UserExists extends \Exception
 {
 	
 }

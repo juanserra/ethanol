@@ -38,11 +38,12 @@ Autoloader::add_classes(array(
 	'Ethanol\Observer_Unique'	   => __DIR__.'/classes/observer/unique.php',
 	
 	//Exceptions
-	'Ethanol\LogInFailed' => __DIR__.'/classes/ethanol.php',
-	'Ethanol\GroupNotFound' => __DIR__.'/classes/ethanol.php',
-	'Ethanol\NoSuchUser' => __DIR__.'/classes/ethanol.php',
+	'Ethanol\LogInFailed'          => __DIR__.'/classes/ethanol.php',
+	'Ethanol\GroupNotFound'        => __DIR__.'/classes/ethanol.php',
+	'Ethanol\NoSuchUser'           => __DIR__.'/classes/ethanol.php',
+	'Ethanol\UserExists'           => __DIR__.'/classes/ethanol.php',
 	
-	'Ethanol\NoSuchActivationKey' => __DIR__.'/classes/auth/driver.php',
+	'Ethanol\NoSuchActivationKey'  => __DIR__.'/classes/auth/driver.php',
 	'Ethanol\UserAlreadyActivated' => __DIR__.'/classes/auth/driver.php',
 ));
 

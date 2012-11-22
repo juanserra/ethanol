@@ -9,5 +9,6 @@ return array(
 		'noUsers' => 'There are no users!',
 		'noSuchUser' => 'No such user exists',
 		'exceededLoginTries' => 'Please wait a while before trying to log in again.',
+		'userExists' => 'A user with that email already exists',
 	),
 );

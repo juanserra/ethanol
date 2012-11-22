@@ -8,6 +8,10 @@ return array(
 	//If log in attempts are logged or not. Disabling this will disable things
 	//like max log in attempts. It is recomended that this is enabled.
 	'log_log_in_attempts' => true,
+	'log_in_inital_delay' => 1, // start with a 1 second delay before being able to log in again
+	'log_in_delay_scale' => 2, // After a second failed attempt the delay will be 2 seconds, 4 for the next
+	'log_in_max_delay' => 45, // The maximum delay that will be applied between attempts
+	
 	
 	//Set to true to make users validate their email address before being able to log in
 	'activate_emails' => false,

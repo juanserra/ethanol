@@ -50,42 +50,31 @@ class Ethanol
 	 */
 	public function log_in($email, $userdata)
 	{
+		if(Banner::instance()->is_banned($email))
+		{
+			throw new LogInFailed(\Lang::get('ethanol.errors.exceededLoginTries'));
+		}
+		
 		//Check that the user exists.
 		if (!$foundDrivers = $this->user_exists($email))
 		{
-			$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
 			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
 		}
 
 		//Check that the information is correct.
 		if (!$user = Auth::instance()->validate_user($email, $userdata, $foundDrivers))
 		{
-			$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
 			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
 		}
 
-		$this->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
+		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
 
 		//return the user object and update the session.
 		\Session::set(static::$session_key, $user);
 
 		return $user;
-	}
-
-	/**
-	 * Logs an attempt to log in in the database so things like the numner of
-	 * log in attempts can be recorded.
-	 * 
-	 * @param int $status One of $ATTEMPT_GOOD, $ATTEMPT_NO_SUCH_USER or $ATTEMPT_BAD_CRIDENTIALS from Model_Log_In_Attempt
-	 * @param string $email The email that's trying to log in.
-	 */
-	private function log_log_in_attempt($status, $email)
-	{
-		$logEntry = new Model_Log_In_Attempt;
-		$logEntry->email = $email;
-		$logEntry->status = $status;
-
-		$logEntry->save();
 	}
 
 	/**
@@ -480,6 +469,18 @@ class Ethanol
 		}
 
 		return $array;
+	}
+	
+	/**
+	 * Bans an email address and/or an ip for the given time
+	 * 
+	 * @param string|int $time Number of seconds to ban for or something like "+1 Day"
+	 * @param null|string|true $ip Null to ignore IP, string to specify the ip, true to automatically load the ip
+	 * @param null|string $email
+	 */
+	public function ban($time, $ip=null, $email=null)
+	{
+		Banner::instance()->ban($time, $ip, $email);
 	}
 
 }

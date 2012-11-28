@@ -23,7 +23,8 @@ class Auth_Driver_Database extends Auth_Driver
 		$security->salt = Hasher::instance()->hash(\Date::time(), Random::instance()->random());
 		$security->password = Hasher::instance()->hash($password, $security->salt);
 
-		unset($password);
+		//TODO: Find a better solution to this
+		//unset($password);
 
 		if (\Config::get('ethanol.activate_emails', false))
 		{
@@ -57,7 +58,8 @@ class Auth_Driver_Database extends Auth_Driver
 
 		$user->security = $security;
 		$user->save();
-		unset($user->security);
+		//TODO: Find a better solution to this
+		//unset($user->security);
 
 		return $user;
 	}
@@ -104,6 +106,8 @@ class Auth_Driver_Database extends Auth_Driver
 		$user = Model_User::find('first', array(
 			'related' => array(
 				'security',
+				'meta',
+				'groups',
 			),
 			'where' => array(
 				array('email', $email),
@@ -117,7 +121,8 @@ class Auth_Driver_Database extends Auth_Driver
 
 		if ($hashedPassword == $user->security->password)
 		{
-			unset($user->security);
+			//TODO: Find a better solution to this
+			//unset($user->security);
 			return $user;
 		}
 

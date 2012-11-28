@@ -72,7 +72,7 @@ class Ethanol
 		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
 
 		//return the user object and update the session.
-		\Session::set(static::$session_key, $user);
+		\Session::set(static::$session_key, $user->id);
 
 		return $user;
 	}
@@ -128,11 +128,21 @@ class Ethanol
 	 */
 	public function current_user()
 	{
-		$user = \Session::get(static::$session_key, false);
+		$userID = \Session::get(static::$session_key, false);
 
-		if (!$user)
+		if (!$userID)
 		{
 			$user = $this->construct_guest_user();
+		}
+		else
+		{
+			$user = Model_User::find($userID, array(
+				'related' => array(
+					'meta',
+					'groups',
+					'groups.permissions'
+				),
+			));
 		}
 
 		return $user;

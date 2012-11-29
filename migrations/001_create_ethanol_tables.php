@@ -32,7 +32,7 @@ class Create_Ethanol_tables {
 				'constraint' => 11,
 				'null'       => false
 			)
-		),'id');
+		),array('id'));
 		/* groups_users table */
 		echo('Creating tables groups_users');
 		\DBUtil::create_table('groups_users',array(

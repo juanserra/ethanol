@@ -1,3 +1,4 @@
+<?php
 namespace Fuel\Migrations;
 
 class Create_ethanol_tables {

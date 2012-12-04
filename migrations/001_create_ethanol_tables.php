@@ -1,6 +1,6 @@
 namespace Fuel\Migrations;
 
-class Create_Ethanol_tables {
+class Create_ethanol_tables {
 
 	public function up() {
 		/* Bans Table */

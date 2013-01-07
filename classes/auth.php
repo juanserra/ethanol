@@ -141,4 +141,50 @@ class Auth
 		return false;
 	}
 
+	/**
+	 * Gets the login forms for the given drivers. If null is passed then all
+	 * forms will be returned. Alternatly an array of names can be passed to get
+	 * a select number of login forms or a string for a single login form.
+	 * 
+	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
+	 */
+	public function get_form($drivers=null)
+	{
+		//Work out what form of input we have been given and load the correct
+		//driver list for it.
+		$driverList = array();
+		if(is_string($drivers))
+		{
+			$driverList = (array) $drivers;
+		}
+		else if(is_array($drivers))
+		{
+			$driverList = $drivers;
+		}
+		else
+		{
+			$driverList = $this->avaliable_drivers;
+		}
+		
+		//Loop through all the drivers and ask them for their html
+		$html = array();
+		foreach($driverList as $driver)
+		{
+			$html[$driver] = $this->get_driver_form_html($driver);
+		}
+		
+		return $html;
+	}
+	
+	/**
+	 * Gets the html log in form for the given driver
+	 * 
+	 * @param string $driver Name of a the driver
+	 */
+	public function get_driver_form_html($driver)
+	{
+		$instance = $this->get_driver($driver);
+		
+		return $instance->get_form();
+	}
 }

@@ -46,6 +46,12 @@ abstract class Auth_Driver
 	public abstract function validate_user($email, $userdata);
 	
 	/**
+	 * This should retun a block of HTML that can be used to login with the
+	 * driver.
+	 */
+	public abstract function get_form();
+	
+	/**
 	 * Attempts to find a user by email address or returns a new (unsaved) user
 	 * object if not.
 	 * 

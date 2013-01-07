@@ -129,4 +129,9 @@ class Auth_Driver_Database extends Auth_Driver
 		return false;
 	}
 
+	public function get_form()
+	{
+		return \View::forge('ethanol/driver/database_login')->render();
+	}
+
 }

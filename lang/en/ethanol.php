@@ -11,4 +11,8 @@ return array(
 		'exceededLoginTries' => 'Please wait a while before trying to log in again.',
 		'userExists' => 'A user with that email already exists',
 	),
+	
+	'username' => 'Username',
+	'password' => 'Password',
+	'log_in' => 'Log In',
 );

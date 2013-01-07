@@ -32,4 +32,9 @@ return array(
 		//Default random driver to use if none is specified.
 		'default_driver' => 'Ethanol\Random_Driver_Simple',
 	),
+	
+	//Facebook driver settings
+	'facebook' => array(
+		'app_id' => '485563954799508',
+	),
 );

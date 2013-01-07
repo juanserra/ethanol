@@ -78,6 +78,18 @@ class Ethanol
 	}
 
 	/**
+	 * Gets the login forms for the given drivers. If null is passed then all
+	 * forms will be returned. Alternatly an array of names can be passed to get
+	 * a select number of login forms or a string for a single login form.
+	 * 
+	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
+	 */
+	public function get_form($drivers=null)
+	{
+		return Auth::instance()->get_form($drivers);
+	}
+	
+	/**
 	 * Returns an array of driver names that reconise the given email address. 
 	 * The array will be empty if the user is not reconised by any drivers.
 	 * 

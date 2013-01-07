@@ -21,6 +21,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Auth'                 => __DIR__.'/classes/auth.php',
 	'Ethanol\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',
 	'Ethanol\Auth_Driver_Database' => __DIR__.'/classes/auth/driver/database.php',
+	'Ethanol\Auth_Driver_Facebook' => __DIR__.'/classes/auth/driver/facebook.php',
 	
 	//Logging related classes
 	'Ethanol\Logger'               => __DIR__.'/classes/logger.php',
@@ -47,4 +48,7 @@ Autoloader::add_classes(array(
 	'Ethanol\UserAlreadyActivated' => __DIR__.'/classes/auth/driver.php',
 ));
 
-Ethanol\Auth::instance()->register_driver('database');
+Ethanol\Auth::instance()->register_driver(array(
+	'database',
+	'facebook'
+));

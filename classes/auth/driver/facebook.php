@@ -20,9 +20,16 @@ class Auth_Driver_Facebook extends Auth_Driver
 		
 	}
 
+	/**
+	 * Generates a facebook login page using the facebook template
+	 * 
+	 * @return string
+	 */
 	public function get_form()
 	{
 		$csrf_key = Random::instance()->random();
+		
+		\Session::set('ethanol.driver.facebook.csrf', $csrf_key);
 		
 		$login_url = 'https://www.facebook.com/dialog/oauth?
 client_id='.\Config::get('ethanol.facebook.app_id').'

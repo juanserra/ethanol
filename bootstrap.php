@@ -32,6 +32,7 @@ Autoloader::add_classes(array(
 	'Ethanol\Model_User_Meta'      => __DIR__.'/classes/model/user/meta.php',
 	'Ethanol\Model_User_Security'  => __DIR__.'/classes/model/user/security.php',
 	'Ethanol\Model_User_Group'     => __DIR__.'/classes/model/user/group.php',
+	'Ethanol\Model_User_Oauth'     => __DIR__.'/classes/model/user/oauth.php',
 	'Ethanol\Model_Permission'     => __DIR__.'/classes/model/permission.php',
 	'Ethanol\Model_Log_In_Attempt' => __DIR__.'/classes/model/log/in/attempt.php',
 	'Ethanol\Model_Ban'            => __DIR__.'/classes/model/ban.php',
@@ -43,6 +44,7 @@ Autoloader::add_classes(array(
 	'Ethanol\GroupNotFound'        => __DIR__.'/classes/ethanol.php',
 	'Ethanol\NoSuchUser'           => __DIR__.'/classes/ethanol.php',
 	'Ethanol\UserExists'           => __DIR__.'/classes/ethanol.php',
+	'Ethanol\ConfigError'          => __DIR__.'/classes/ethanol.php',
 	
 	'Ethanol\NoSuchActivationKey'  => __DIR__.'/classes/auth/driver.php',
 	'Ethanol\UserAlreadyActivated' => __DIR__.'/classes/auth/driver.php',

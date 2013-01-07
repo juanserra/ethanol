@@ -61,7 +61,7 @@ class Auth
 	 * @param string $name The name of the driver to load.
 	 * @return \Ethanol\class
 	 */
-	private function get_driver($name)
+	public function get_driver($name)
 	{
 		$class = $this->translate_driver_name($name);
 
@@ -121,21 +121,27 @@ class Auth
 	}
 
 	/**
-	 * Asks each of the given drivers if the passed user cradentials are valid.
+	 * Asks each of the given drivers if the passed user credentials are valid.
 	 * 
 	 * @param string $email The email of the account to check
 	 * @param array|string $userdata The extra user data to validate
 	 * @param array $drivers List of driver names to try
 	 * @return false|Ethanol\Model_User
 	 */
-	public function validate_user($email, $userdata, $drivers)
+	public function validate_user($credentials)
 	{
-		foreach ($drivers as $driver)
+		//Get the requested driver and attempt a login
+		$driver = \Arr::get($credentials, 'driver', null);
+		if($driver == null)
 		{
-			if ($user = $this->get_driver($driver)->validate_user($email, $userdata))
-			{
-				return $user;
-			}
+			//No driver specified so throw an error
+			throw new ConfigError('No driver was specified.');
+		}
+		
+		$user = $this->get_driver($driver)->validate_user($credentials);
+		if ($user instanceof Model_User)
+		{
+			return $user;
 		}
 
 		return false;

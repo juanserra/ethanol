@@ -45,36 +45,12 @@ class Ethanol
 	/**
 	 * Attempts to log a user in
 	 * 
-	 * @param string $email
-	 * @param string|array $userdata
+	 * @param array $credentials
+	 * @return Ethanol\Model_User The newly logged in user
 	 */
-	public function log_in($email, $userdata)
+	public function log_in($credentials)
 	{
-		if(Banner::instance()->is_banned($email))
-		{
-			throw new LogInFailed(\Lang::get('ethanol.errors.exceededLoginTries'));
-		}
-		
-		//Check that the user exists.
-		if (!$foundDrivers = $this->user_exists($email))
-		{
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
-			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
-		}
-
-		//Check that the information is correct.
-		if (!$user = Auth::instance()->validate_user($email, $userdata, $foundDrivers))
-		{
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
-			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
-		}
-
-		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
-
-		//return the user object and update the session.
-		\Session::set(static::$session_key, $user->id);
-
-		return $user;
+		return Auth::instance()->validate_user($credentials);;
 	}
 
 	/**
@@ -528,6 +504,11 @@ class NoSuchUser extends \Exception
 }
 
 class UserExists extends \Exception
+{
+	
+}
+
+class ConfigError extends \Exception
 {
 	
 }

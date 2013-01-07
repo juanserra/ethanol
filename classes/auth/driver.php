@@ -39,11 +39,10 @@ abstract class Auth_Driver
 	/**
 	 * Attempts to validate a user's cradentials
 	 * 
-	 * @param string $email The email address of the user
 	 * @param string|array $userdata Any extra data that might be needed
 	 * @return false|Ethanol\Model_User
 	 */
-	public abstract function validate_user($email, $userdata);
+	public abstract function validate_user($userdata);
 	
 	/**
 	 * This should retun a block of HTML that can be used to login with the
@@ -69,6 +68,12 @@ abstract class Auth_Driver
 			$user->email = $email;
 		}
 		return $user;
+	}
+	
+	public final function get_login_controller_path($driver)
+	{
+		//TODO: make this more safe?
+		return \Uri::create().'?driver='.$driver;
 	}
 
 }

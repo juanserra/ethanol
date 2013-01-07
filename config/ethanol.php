@@ -36,5 +36,6 @@ return array(
 	//Facebook driver settings
 	'facebook' => array(
 		'app_id' => '485563954799508',
+		'app_secret' => 'e3769b77baef358d50fda20e0bb448f3',
 	),
 );

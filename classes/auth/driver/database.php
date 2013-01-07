@@ -101,8 +101,10 @@ class Auth_Driver_Database extends Auth_Driver
 		return (count($users) > 0);
 	}
 
-	public function validate_user($email, $userdata)
+	public function validate_user($userdata)
 	{
+		$email = \Arr::get($userdata, 'email');
+		
 		$user = Model_User::find('first', array(
 			'related' => array(
 				'security',

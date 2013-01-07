@@ -50,7 +50,13 @@ class Ethanol
 	 */
 	public function log_in($credentials)
 	{
-		return Auth::instance()->validate_user($credentials);;
+		$user = Auth::instance()->validate_user($credentials);
+		
+		\Session::set(static::$session_key, $user);
+		
+		//TODO: add logging back in
+		
+		return $user;
 	}
 
 	/**
@@ -124,6 +130,7 @@ class Ethanol
 		}
 		else
 		{
+			//TODO: cache this
 			$user = Model_User::find($userID, array(
 				'related' => array(
 					'meta',
@@ -152,6 +159,16 @@ class Ethanol
 		//TODO: Add guest groups + permissions
 
 		return $user;
+	}
+	
+	/**
+	 * If the current user is a guest or not.
+	 * 
+	 * @return boolean True if the current user is a guest user.
+	 */
+	public function is_guest()
+	{
+		return $this->current_user()->id == static::$guest_user_id;
 	}
 
 	/**

@@ -80,14 +80,50 @@ class Auth_Driver_Facebook extends Auth_Driver
 		$graph_url = "https://graph.facebook.com/me?access_token=" . $params['access_token'];
 		$facebookUser = json_decode(file_get_contents($graph_url));
 		
+		$email = $facebookUser->email;
+		
 		//Check if a user exists yet.
+		$oauth = Model_User_Oauth::find('first', array(
+			'related' => array(
+				'user'
+			),
+			'where' => array(
+				array('driver', 'facebook'),
+				array('email', $email)
+			),
+		));
 		
 		//if not create
+		if(is_null($oauth))
+		{	
+			//Check if we have a guest user or not.
+			if(Ethanol::instance()->is_guest())
+			{
+				$user = new Model_User;
+				$user->activated = Model_User::$USER_ACTIVATED;
+				$user->email = $email;
+			}
+			else
+			{
+				//Not a guest user so get the current user.
+				$user = Ethanol::instance()->current_user();
+			}
+			
+			//And assocate the new oauth with it.
+			$oauth = new Model_User_Oauth;
+			$oauth->driver = 'facebook';
+			$oauth->email = $email;
+			
+			$user->oauth[] = $oauth;
+			
+			$user->save();
+		}
+		else
+		{
+			$user = $oauth->user;
+		}
 		
 		//Got a user so log in now
-		
-		echo 'Facebook <pre>';
-		print_r($facebookUser);
-		exit;
+		return $user;
 	}	
 }

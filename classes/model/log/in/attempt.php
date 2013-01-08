@@ -15,7 +15,7 @@ class Model_Log_In_Attempt extends \Orm\Model
 	public static $ATTEMPT_NO_SUCH_USER = 1;
 	public static $ATTEMPT_BAD_CRIDENTIALS = 2;
 	
-	protected static $_table_name = 'log_in_attempt';
+	protected static $_table_name = 'ethanol_log_in_attempt';
 	protected static $_properties = array(
 		'id',
 		'status',

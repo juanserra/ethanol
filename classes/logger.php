@@ -42,7 +42,7 @@ class Logger
 			return;
 		}
 		$logEntry = new Model_Log_In_Attempt;
-		$logEntry->email = $email;
+		$logEntry->email = (is_null($email))? '' : $email;
 		$logEntry->status = $status;
 
 		$logEntry->save();

@@ -11,7 +11,7 @@ namespace Ethanol;
 class Model_Ban extends \Orm\Model
 {
 
-	protected static $_table_name = 'bans';
+	protected static $_table_name = 'ethanol_bans';
 	protected static $_properties = array(
 		'id',
 		'email',

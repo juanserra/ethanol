@@ -11,11 +11,7 @@ namespace Ethanol;
 class Model_User_Meta extends \Orm\Model
 {
 
-	protected static $_table_name = 'user_metadata';
-	protected static $_properties = array(
-		'id',
-		'user_id',
-	);
+	protected static $_table_name = 'ethanol_user_metadata';
 	protected static $_belongs_to = array(
 		'user' => array(
 			'key_from' => 'user_id',

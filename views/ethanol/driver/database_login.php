@@ -2,7 +2,7 @@
 <table>
 	<tr>
 		<td>
-			<?php echo Form::label(Lang::get('ethanol.username')); ?><?php echo Form::input('username'); ?>
+			<?php echo Form::label(Lang::get('ethanol.email')); ?><?php echo Form::input('email'); ?>
 		</td>
 	</tr>
 	<tr>

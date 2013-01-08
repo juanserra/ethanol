@@ -12,7 +12,7 @@ return array(
 		'userExists' => 'A user with that email already exists',
 	),
 	
-	'username' => 'Username',
+	'email' => 'Email',
 	'password' => 'Password',
 	'log_in' => 'Log In',
 );

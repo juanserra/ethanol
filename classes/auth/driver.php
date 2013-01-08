@@ -69,6 +69,13 @@ abstract class Auth_Driver
 		return $user;
 	}
 	
+	/**
+	 * Gets the path that oauth requests shoudl redirect to after the user has
+	 * confirmed with the 3rd party. Currently just the current page.
+	 * 
+	 * @param string $driver Name of the driver
+	 * @return string
+	 */
 	public final function get_login_controller_path($driver)
 	{
 		return \Uri::create(null, array(), array('driver' => $driver));
@@ -91,18 +98,28 @@ abstract class Auth_Driver
 		
 		if(count($params) == 0)
 		{
+			//TODO: translate this
 			throw new LogInFailed('Unable to authenticate with '.$driver);
 		}
 		
 		return $params;
 	}
 	
+	/**
+	 * Attemps an oAuth login. Will create a new user if one does not already
+	 * exist with the given email. If a user is logged in the 3rd party account
+	 * is linked with the logged in user.
+	 * 
+	 * @param string $email The email passed back from the 3rd party
+	 * @param string $driver Name of the driver the email is from
+	 * @return Ethanol\Model_User
+	 */
 	protected function perform_login($email, $driver)
 	{
 		//Check if a user exists yet.
 		$oauth = Model_User_Oauth::find('first', array(
 			'related' => array(
-				'user'
+				'user',
 			),
 			'where' => array(
 				array('driver', $driver),

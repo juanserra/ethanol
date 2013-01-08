@@ -54,5 +54,4 @@ Autoloader::add_classes(array(
 Ethanol\Auth::instance()->register_driver(array(
 	'database',
 	'facebook',
-	'google',
 ));

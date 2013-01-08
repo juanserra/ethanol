@@ -45,8 +45,14 @@ class Auth_Driver_Google extends Auth_Driver
 
 	public function validate_user($userdata)
 	{
+		$code = \Arr::get($userdata, 'code');
+		
+		$emailUrl = 'https://www.googleapis.com/userinfo/email?alt=json&token='.$code;
+		
+		$emailData = json_decode(file_get_contents($emailUrl));
+		
 		echo '<pre>';
-		print_r($userdata);
+		print_r($emailData);
 		exit;
 	}
 	

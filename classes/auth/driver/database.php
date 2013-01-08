@@ -30,9 +30,6 @@ class Auth_Driver_Database extends Auth_Driver
 		$security->salt = Hasher::instance()->hash(\Date::time(), Random::instance()->random());
 		$security->password = Hasher::instance()->hash($password, $security->salt);
 
-		//TODO: Find a better solution to this
-		//unset($password);
-
 		if (\Config::get('ethanol.activate_emails', false))
 		{
 			$keyLength = \Config::get('ethanol.activation_key_length');
@@ -65,8 +62,7 @@ class Auth_Driver_Database extends Auth_Driver
 
 		$user->security = $security;
 		$user->save();
-		//TODO: Find a better solution to this
-		//unset($user->security);
+		$user->clean_security();
 
 		return $user;
 	}
@@ -136,8 +132,7 @@ class Auth_Driver_Database extends Auth_Driver
 
 		if ($hashedPassword == $user->security->password)
 		{
-			//TODO: Find a better solution to this
-			//unset($user->security);
+			$user->clean_security();
 			return $user;
 		}
 

@@ -77,5 +77,12 @@ class Model_User extends \Orm\Model
 	{
 		static::$_properties['activated']['default'] = static::$USER_INACTIVE;
 	}
+	
+	public function clean_security()
+	{
+		unset($this->_original_relations['security']);
+		unset($this->security);
+		
+	}
 
 }

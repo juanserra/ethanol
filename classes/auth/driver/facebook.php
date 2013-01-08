@@ -53,7 +53,13 @@ class Auth_Driver_Facebook extends Auth_Driver
 		//User wants to log in so make sure there's an Ethanol user as well
 		
 		//TODO: check the CSRF token
-		//TODO: Check if there is a active token already? (not sure this is really needed except for reduing number of requests)
+		if($userdata['state'] != \Session::get('ethanol.driver.facebook.csrf'))
+		{
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, null);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+		//Remove the csrf token now that it has been validated
+		\Session::set('ethanol.driver.facebook.csrf', '');
 		
 		$app_id = \Config::get('ethanol.facebook.app_id');
 		$app_secret = \Config::get('ethanol.facebook.app_secret');

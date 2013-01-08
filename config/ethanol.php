@@ -35,12 +35,12 @@ return array(
 	
 	//Facebook driver settings
 	'facebook' => array(
-		'app_id' => '485563954799508',
-		'app_secret' => 'e3769b77baef358d50fda20e0bb448f3',
+		'app_id' => '',
+		'app_secret' => '',
 	),
 	//Google driver settings
 	'google' => array(
-		'client_id' => '120073662723.apps.googleusercontent.com',
-		'client_secret' => 'MovROleDzfjgy9QgS6RfFU50',
+		'client_id' => '',
+		'client_secret' => '',
 	),
 );

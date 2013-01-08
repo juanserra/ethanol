@@ -11,7 +11,7 @@ namespace Ethanol;
 class Model_User_Group extends \Orm\Model
 {
 
-	protected static $_table_name = 'user_groups';
+	protected static $_table_name = 'ethanol_user_groups';
 	protected static $_properties = array(
 		'id',
 		'name',

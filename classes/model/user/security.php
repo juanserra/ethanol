@@ -9,7 +9,7 @@ namespace Ethanol;
  */
 class Model_User_Security extends \Orm\Model
 {
-	protected static $_table_name = 'user_security';
+	protected static $_table_name = 'ethanol_user_security';
 	protected static $_properties = array(
 		'id',
 		'user_id',

@@ -11,7 +11,7 @@ namespace Ethanol;
 class Model_Permission extends \Orm\Model
 {
 
-	protected static $_table_name = 'group_permissions';
+	protected static $_table_name = 'ethanol_group_permissions';
 	protected static $_properties = array(
 		'id',
 		'identifier',

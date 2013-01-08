@@ -15,7 +15,7 @@ class Model_User extends \Orm\Model
 	public static $USER_ACTIVATED = '1';
 	public static $USER_INACTIVE = '0';
 	
-	protected static $_table_name = 'users';
+	protected static $_table_name = 'ethanol_users';
 	protected static $_properties = array(
 		'id',
 		'email',

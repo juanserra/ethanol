@@ -102,7 +102,7 @@ class Auth_Driver_Database extends Auth_Driver
 	}
 
 	public function validate_user($userdata)
-	{
+	{	
 		$email = \Arr::get($userdata, 'email');
 		
 		$user = Model_User::find('first', array(
@@ -115,9 +115,6 @@ class Auth_Driver_Database extends Auth_Driver
 				array('email', $email),
 			),
 		));
-		echo '<pre>';
-		print_r($user);
-		exit;
 
 		$password = \Arr::get($userdata, 'password');
 

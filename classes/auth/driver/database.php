@@ -115,6 +115,9 @@ class Auth_Driver_Database extends Auth_Driver
 				array('email', $email),
 			),
 		));
+		echo '<pre>';
+		print_r($user);
+		exit;
 
 		$password = \Arr::get($userdata, 'password');
 
@@ -133,7 +136,11 @@ class Auth_Driver_Database extends Auth_Driver
 
 	public function get_form()
 	{
-		return \View::forge('ethanol/driver/database_login')->render();
+		$submitUri = \Uri::create(null, array(), array('driver' => 'database'));
+		
+		return \View::forge('ethanol/driver/database_login')
+			->set('submitUri', $submitUri)
+			->render();
 	}
 
 }

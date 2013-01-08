@@ -1,4 +1,4 @@
-<?php echo Form::open(); ?>
+<?php echo Form::open($submitUri); ?>
 <table>
 	<tr>
 		<td>

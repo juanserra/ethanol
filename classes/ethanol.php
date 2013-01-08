@@ -52,7 +52,7 @@ class Ethanol
 	{
 		$user = Auth::instance()->validate_user($credentials);
 		
-		\Session::set(static::$session_key, $user);
+		\Session::set(static::$session_key, $user->id);
 		
 		//TODO: add logging back in
 		

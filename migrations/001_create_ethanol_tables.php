@@ -203,14 +203,6 @@ class Create_ethanol_tables {
 			'updated_at' => 1353420651
 			));
 		$query3->execute();
-		$query4 = \DB::insert('users')->set(array(
-			'id'  => 1,
-			'email' => 'admin@test.com',
-			'activated' => 1,
-			'created_at' => 1353420651,
-			'updated_at' => 1353420651
-			));
-		$query4->execute();
 		$q_data = array(
 			array(3, 'registered'),
 			array(2, 'admin'),

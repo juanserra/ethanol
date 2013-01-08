@@ -3,9 +3,10 @@
 namespace Ethanol;
 
 /**
- * Description of google
+ * Unfinished driver for google account authentication 
  *
- * @author Steve West
+ * @author Steve "uru" West <uruwolf@gmail.com>
+ * @license http://philsturgeon.co.uk/code/dbad-license DbaD
  */
 class Auth_Driver_Google extends Auth_Driver
 {

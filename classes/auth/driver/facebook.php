@@ -3,9 +3,10 @@
 namespace Ethanol;
 
 /**
- * 
+ * Defines an auth driver for interacting with facebook
  *
  * @author Steve "uru" West <uruwolf@gmail.com>
+ * @license http://philsturgeon.co.uk/code/dbad-license DbaD
  */
 class Auth_Driver_Facebook extends Auth_Driver
 {

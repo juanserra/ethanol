@@ -1,7 +1,7 @@
 <?php
 namespace Fuel\Migrations;
 
-class Create_ethanol_tables
+class Create_oauth_table
 {
 
 	public function up()

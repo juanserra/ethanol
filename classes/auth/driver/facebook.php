@@ -52,7 +52,6 @@ class Auth_Driver_Facebook extends Auth_Driver
 	{
 		//User wants to log in so make sure there's an Ethanol user as well
 		
-		//TODO: check the CSRF token
 		if($userdata['state'] != \Session::get('ethanol.driver.facebook.csrf'))
 		{
 			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, null);

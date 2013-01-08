@@ -14,11 +14,10 @@ abstract class Auth_Driver
 	/**
 	 * Asks the driver to create a new user.
 	 * 
-	 * @param string $email The email address of this user. This is required by all drivers.
 	 * @param array $userdata An array containing various information about the user to create.
 	 * @return Ethanol\Model_User The user object that was created.
 	 */
-	public abstract function create_user($email, $userdata);
+	public abstract function create_user($userdata);
 
 	/**
 	 * Allows a user to be activated if user activation is required

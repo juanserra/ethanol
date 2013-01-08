@@ -78,13 +78,12 @@ class Auth
 	 * Creates a user with the given driver
 	 * 
 	 * @param string $driver Name of the driver to use. (eg, 'database')
-	 * @param string $email The email address to identify this user
 	 * @param array|string $userdata See individual driver documentation
 	 * @return Ethanol\Model_User
 	 */
-	public function create_user($driver, $email, $userdata)
+	public function create_user($driver, $userdata)
 	{
-		return $this->get_driver($driver)->create_user($email, $userdata);
+		return $this->get_driver($driver)->create_user($userdata);
 	}
 
 	/**

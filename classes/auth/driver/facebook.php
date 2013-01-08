@@ -12,12 +12,12 @@ class Auth_Driver_Facebook extends Auth_Driver
 	
 	public function activate_user($userdata)
 	{
-		
+		return true;
 	}
 
-	public function create_user($email, $userdata)
+	public function create_user($userdata)
 	{
-		
+		return $this->validate_user($userdata);
 	}
 
 	/**

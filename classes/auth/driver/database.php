@@ -11,10 +11,12 @@ namespace Ethanol;
 class Auth_Driver_Database extends Auth_Driver
 {
 
-	public function create_user($email, $userdata)
+	public function create_user($userdata)
 	{
+		//TODO: add checks for missing information
 		$password = \Arr::get($userdata, 'password');
-
+		$email = \Arr::get($userdata, 'email');
+		
 		$user = Auth_Driver::get_core_user($email);
 
 		$security = new Model_User_Security;

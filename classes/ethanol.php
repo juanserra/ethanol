@@ -87,20 +87,21 @@ class Ethanol
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.
 	 * 
-	 * @param string $email
 	 * @param string $userdata
 	 * 
 	 * @return Ethanol\Model_User The newly created user
 	 * 
 	 */
-	public function create_user($email, $userdata)
+	public function create_user($userdata)
 	{
-		if(count($this->user_exists($email)) > 0)
-		{
-			throw new UserExists(\Lang::get('ethanol.errors.userExists'));
-		}
+		//TODO: check for user already existing. Make this something the driver
+		//is responsable for?
+//		if(count($this->user_exists($email)) > 0)
+//		{
+//			throw new UserExists(\Lang::get('ethanol.errors.userExists'));
+//		}
 		
-		return Auth::instance()->create_user($this->driver, $email, $userdata);
+		return Auth::instance()->create_user($this->driver, $userdata);
 	}
 
 	/**

@@ -13,9 +13,14 @@ class Auth_Driver_Database extends Auth_Driver
 
 	public function create_user($userdata)
 	{
-		//TODO: add checks for missing information
-		$password = \Arr::get($userdata, 'password');
-		$email = \Arr::get($userdata, 'email');
+		$password = \Arr::get($userdata, 'password', null);
+		$email = \Arr::get($userdata, 'email', null);
+	
+		if(is_null($password) || is_null($email))
+		{
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
 		
 		$user = Auth_Driver::get_core_user($email);
 

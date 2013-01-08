@@ -107,6 +107,12 @@ class Auth_Driver_Database extends Auth_Driver
 	{	
 		$email = \Arr::get($userdata, 'email');
 		
+		if(!$this->has_user($email))
+		{
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+		
 		$user = Model_User::find('first', array(
 			'related' => array(
 				'security',

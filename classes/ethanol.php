@@ -52,9 +52,16 @@ class Ethanol
 	{
 		$user = Auth::instance()->validate_user($credentials);
 		
-		\Session::set(static::$session_key, $user->id);
+		if($user == false)
+		{
+			//Could not validate for some reasion so make things explode
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $user->email);
+		}
 		
-		//TODO: add logging back in
+		//Nothing exploded up to this point so assume that the user has logged
+		//in ok.
+		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $user->email);
+		\Session::set(static::$session_key, $user->id);
 		
 		return $user;
 	}

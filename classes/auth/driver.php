@@ -116,6 +116,13 @@ abstract class Auth_Driver
 	 */
 	protected function perform_login($email, $driver)
 	{
+		//This is the first point that we have an email do make a check for
+		//banned users
+		if(Banner::instance()->is_banned($email))
+		{
+			throw new LogInFailed(\Lang::get('ethanol.errors.exceededLoginTries'));
+		}
+		
 		//Check if a user exists yet.
 		$oauth = Model_User_Oauth::find('first', array(
 			'related' => array(

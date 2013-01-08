@@ -235,7 +235,7 @@ class Create_ethanol_tables {
 			'group_permissions',
 			'groups_users'
 		);
-		foreach($tables as $tables) {
+		foreach($tables as $table) {
 			\DBUtil::drop_table($table);
 		}
 	}

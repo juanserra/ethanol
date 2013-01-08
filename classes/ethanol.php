@@ -31,7 +31,6 @@ class Ethanol
 
 	public static function _init()
 	{
-		//TODO: unhardcode these names
 		\Config::load('ethanol', true);
 		\Config::load('ethanol_permissions', true);
 		\Lang::load('ethanol', 'ethanol');
@@ -100,14 +99,7 @@ class Ethanol
 	 * 
 	 */
 	public function create_user($userdata)
-	{
-		//TODO: check for user already existing. Make this something the driver
-		//is responsable for?
-//		if(count($this->user_exists($email)) > 0)
-//		{
-//			throw new UserExists(\Lang::get('ethanol.errors.userExists'));
-//		}
-		
+	{	
 		return Auth::instance()->create_user($this->driver, $userdata);
 	}
 

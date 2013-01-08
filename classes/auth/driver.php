@@ -72,10 +72,77 @@ abstract class Auth_Driver
 	
 	public final function get_login_controller_path($driver)
 	{
-		//TODO: make this more safe?
-		return \Uri::create().'?driver='.$driver;
+		return \Uri::create(null, array(), array('driver' => $driver));
 	}
 
+	/**
+	 * Makes a request to an oAuth service for an access token
+	 * 
+	 * @param type $url
+	 * @param type $driver
+	 * @return array
+	 * @throws LogInFailed
+	 */
+	protected final function get_access_token($url, $driver)
+	{
+		//Warning suppressed to handle bad token data without everything exploding
+		$response = @file_get_contents($url);
+		$params = array();
+		parse_str($response, $params);
+		
+		if(count($params) == 0)
+		{
+			throw new LogInFailed('Unable to authenticate with '.$driver);
+		}
+		
+		return $params;
+	}
+	
+	protected function perform_login($email, $driver)
+	{
+		//Check if a user exists yet.
+		$oauth = Model_User_Oauth::find('first', array(
+			'related' => array(
+				'user'
+			),
+			'where' => array(
+				array('driver', $driver),
+				array('email', $email)
+			),
+		));
+		
+		//if not create
+		if(is_null($oauth))
+		{	
+			//Check if we have a guest user or not.
+			if(Ethanol::instance()->is_guest())
+			{
+				$user = new Model_User;
+				$user->activated = Model_User::$USER_ACTIVATED;
+				$user->email = $email;
+			}
+			else
+			{
+				//Not a guest user so get the current user.
+				$user = Ethanol::instance()->current_user();
+			}
+			
+			//And assocate the new oauth with it.
+			$oauth = new Model_User_Oauth;
+			$oauth->driver = $driver;
+			$oauth->email = $email;
+			
+			$user->oauth[] = $oauth;
+			
+			$user->save();
+		}
+		else
+		{
+			$user = $oauth->user;
+		}
+		
+		return $user;
+	}
 }
 
 class NoSuchActivationKey extends \Exception {}

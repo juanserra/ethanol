@@ -98,8 +98,7 @@ abstract class Auth_Driver
 		
 		if(count($params) == 0)
 		{
-			//TODO: translate this
-			throw new LogInFailed('Unable to authenticate with '.$driver);
+			throw new LogInFailed(\Lang::get('ethanol.errors.unableToAuthDriver', array('driver' => $driver)));
 		}
 		
 		return $params;

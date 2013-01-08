@@ -61,7 +61,7 @@ class Auth
 	 * @param string $name The name of the driver to load.
 	 * @return \Ethanol\class
 	 */
-	private function get_driver($name)
+	public function get_driver($name)
 	{
 		$class = $this->translate_driver_name($name);
 
@@ -78,13 +78,12 @@ class Auth
 	 * Creates a user with the given driver
 	 * 
 	 * @param string $driver Name of the driver to use. (eg, 'database')
-	 * @param string $email The email address to identify this user
 	 * @param array|string $userdata See individual driver documentation
 	 * @return Ethanol\Model_User
 	 */
-	public function create_user($driver, $email, $userdata)
+	public function create_user($driver, $userdata)
 	{
-		return $this->get_driver($driver)->create_user($email, $userdata);
+		return $this->get_driver($driver)->create_user($userdata);
 	}
 
 	/**
@@ -121,24 +120,76 @@ class Auth
 	}
 
 	/**
-	 * Asks each of the given drivers if the passed user cradentials are valid.
+	 * Asks each of the given drivers if the passed user credentials are valid.
 	 * 
 	 * @param string $email The email of the account to check
 	 * @param array|string $userdata The extra user data to validate
 	 * @param array $drivers List of driver names to try
 	 * @return false|Ethanol\Model_User
 	 */
-	public function validate_user($email, $userdata, $drivers)
+	public function validate_user($credentials)
 	{
-		foreach ($drivers as $driver)
+		//Get the requested driver and attempt a login
+		$driver = \Arr::get($credentials, 'driver', null);
+		if($driver == null)
 		{
-			if ($user = $this->get_driver($driver)->validate_user($email, $userdata))
-			{
-				return $user;
-			}
+			//No driver specified so throw an error
+			throw new ConfigError('No driver was specified.');
+		}
+		
+		$user = $this->get_driver($driver)->validate_user($credentials);
+		if ($user instanceof Model_User)
+		{
+			return $user;
 		}
 
 		return false;
 	}
 
+	/**
+	 * Gets the login forms for the given drivers. If null is passed then all
+	 * forms will be returned. Alternatly an array of names can be passed to get
+	 * a select number of login forms or a string for a single login form.
+	 * 
+	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
+	 */
+	public function get_form($drivers=null)
+	{
+		//Work out what form of input we have been given and load the correct
+		//driver list for it.
+		$driverList = array();
+		if(is_string($drivers))
+		{
+			$driverList = (array) $drivers;
+		}
+		else if(is_array($drivers))
+		{
+			$driverList = $drivers;
+		}
+		else
+		{
+			$driverList = $this->avaliable_drivers;
+		}
+		
+		//Loop through all the drivers and ask them for their html
+		$html = array();
+		foreach($driverList as $driver)
+		{
+			$html[$driver] = $this->get_driver_form_html($driver);
+		}
+		
+		return $html;
+	}
+	
+	/**
+	 * Gets the html log in form for the given driver
+	 * 
+	 * @param string $driver Name of a the driver
+	 */
+	public function get_driver_form_html($driver)
+	{
+		$instance = $this->get_driver($driver);
+		
+		return $instance->get_form();
+	}
 }

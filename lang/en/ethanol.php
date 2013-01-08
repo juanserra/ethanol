@@ -10,5 +10,10 @@ return array(
 		'noSuchUser' => 'No such user exists',
 		'exceededLoginTries' => 'Please wait a while before trying to log in again.',
 		'userExists' => 'A user with that email already exists',
+		'unableToAuthDriver' => 'Unable to authenticate with :driver',
 	),
+	
+	'email' => 'Email',
+	'password' => 'Password',
+	'log_in' => 'Log In',
 );

@@ -11,10 +11,17 @@ namespace Ethanol;
 class Auth_Driver_Database extends Auth_Driver
 {
 
-	public function create_user($email, $userdata)
+	public function create_user($userdata)
 	{
-		$password = \Arr::get($userdata, 'password');
-
+		$password = \Arr::get($userdata, 'password', null);
+		$email = \Arr::get($userdata, 'email', null);
+	
+		if(is_null($password) || is_null($email))
+		{
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+		
 		$user = Auth_Driver::get_core_user($email);
 
 		$security = new Model_User_Security;
@@ -101,8 +108,16 @@ class Auth_Driver_Database extends Auth_Driver
 		return (count($users) > 0);
 	}
 
-	public function validate_user($email, $userdata)
-	{
+	public function validate_user($userdata)
+	{	
+		$email = \Arr::get($userdata, 'email');
+		
+		if(!$this->has_user($email))
+		{
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
+			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
+		}
+		
 		$user = Model_User::find('first', array(
 			'related' => array(
 				'security',
@@ -127,6 +142,15 @@ class Auth_Driver_Database extends Auth_Driver
 		}
 
 		return false;
+	}
+
+	public function get_form()
+	{
+		$submitUri = \Uri::create(null, array(), array('driver' => 'database'));
+		
+		return \View::forge('ethanol/driver/database_login')
+			->set('submitUri', $submitUri)
+			->render();
 	}
 
 }

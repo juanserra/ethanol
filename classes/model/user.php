@@ -41,6 +41,14 @@ class Model_User extends \Orm\Model
 			'cascade_delete' => true,
 		),
 	);
+	protected static $_has_many = array(
+		'oauth' => array(
+			'key_from' => 'id',
+			'model_to' => 'Ethanol\Model_User_Oauth',
+			'key_to' => 'user_id',
+			'cascade_delete' => true,
+		),
+	);
 	protected static $_many_many = array(
 		//Lots of users can be in lots of groups
 		'groups' => array(

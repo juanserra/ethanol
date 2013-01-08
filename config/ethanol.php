@@ -32,4 +32,15 @@ return array(
 		//Default random driver to use if none is specified.
 		'default_driver' => 'Ethanol\Random_Driver_Simple',
 	),
+	
+	//Facebook driver settings
+	'facebook' => array(
+		'app_id' => '485563954799508',
+		'app_secret' => 'e3769b77baef358d50fda20e0bb448f3',
+	),
+	//Google driver settings
+	'google' => array(
+		'client_id' => '120073662723.apps.googleusercontent.com',
+		'client_secret' => 'MovROleDzfjgy9QgS6RfFU50',
+	),
 );

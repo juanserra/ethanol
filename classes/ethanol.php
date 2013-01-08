@@ -31,7 +31,6 @@ class Ethanol
 
 	public static function _init()
 	{
-		//TODO: unhardcode these names
 		\Config::load('ethanol', true);
 		\Config::load('ethanol_permissions', true);
 		\Lang::load('ethanol', 'ethanol');
@@ -45,38 +44,39 @@ class Ethanol
 	/**
 	 * Attempts to log a user in
 	 * 
-	 * @param string $email
-	 * @param string|array $userdata
+	 * @param array $credentials
+	 * @return Ethanol\Model_User The newly logged in user
 	 */
-	public function log_in($email, $userdata)
+	public function log_in($credentials)
 	{
-		if(Banner::instance()->is_banned($email))
+		$user = Auth::instance()->validate_user($credentials);
+		
+		if($user == false)
 		{
-			throw new LogInFailed(\Lang::get('ethanol.errors.exceededLoginTries'));
+			//Could not validate for some reasion so make things explode
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $user->email);
 		}
 		
-		//Check that the user exists.
-		if (!$foundDrivers = $this->user_exists($email))
-		{
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_NO_SUCH_USER, $email);
-			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
-		}
-
-		//Check that the information is correct.
-		if (!$user = Auth::instance()->validate_user($email, $userdata, $foundDrivers))
-		{
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
-			throw new LogInFailed(\Lang::get('ethanol.errors.loginInvalid'));
-		}
-
-		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $email);
-
-		//return the user object and update the session.
+		//Nothing exploded up to this point so assume that the user has logged
+		//in ok.
+		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $user->email);
 		\Session::set(static::$session_key, $user->id);
-
+		
 		return $user;
 	}
 
+	/**
+	 * Gets the login forms for the given drivers. If null is passed then all
+	 * forms will be returned. Alternatly an array of names can be passed to get
+	 * a select number of login forms or a string for a single login form.
+	 * 
+	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
+	 */
+	public function get_form($drivers=null)
+	{
+		return Auth::instance()->get_form($drivers);
+	}
+	
 	/**
 	 * Returns an array of driver names that reconise the given email address. 
 	 * The array will be empty if the user is not reconised by any drivers.
@@ -93,20 +93,14 @@ class Ethanol
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.
 	 * 
-	 * @param string $email
 	 * @param string $userdata
 	 * 
 	 * @return Ethanol\Model_User The newly created user
 	 * 
 	 */
-	public function create_user($email, $userdata)
-	{
-		if(count($this->user_exists($email)) > 0)
-		{
-			throw new UserExists(\Lang::get('ethanol.errors.userExists'));
-		}
-		
-		return Auth::instance()->create_user($this->driver, $email, $userdata);
+	public function create_user($userdata)
+	{	
+		return Auth::instance()->create_user($this->driver, $userdata);
 	}
 
 	/**
@@ -136,6 +130,7 @@ class Ethanol
 		}
 		else
 		{
+			//TODO: cache this
 			$user = Model_User::find($userID, array(
 				'related' => array(
 					'meta',
@@ -164,6 +159,16 @@ class Ethanol
 		//TODO: Add guest groups + permissions
 
 		return $user;
+	}
+	
+	/**
+	 * If the current user is a guest or not.
+	 * 
+	 * @return boolean True if the current user is a guest user.
+	 */
+	public function is_guest()
+	{
+		return $this->current_user()->id == static::$guest_user_id;
 	}
 
 	/**
@@ -516,6 +521,11 @@ class NoSuchUser extends \Exception
 }
 
 class UserExists extends \Exception
+{
+	
+}
+
+class ConfigError extends \Exception
 {
 	
 }

@@ -54,7 +54,8 @@ class Ethanol
 		if($user == false)
 		{
 			//Could not validate for some reasion so make things explode
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $user->email);
+			$email = \Arr::get($credentials, 'email', null);
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
 		}
 		
 		//Nothing exploded up to this point so assume that the user has logged

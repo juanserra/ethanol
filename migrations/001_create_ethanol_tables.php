@@ -211,7 +211,7 @@ class Create_ethanol_tables {
 		$query5 = \DB::insert('user_groups');
 		$query5->columns(array('id','name'));
 		foreach($q_data as $data) {
-			$query->values($data);
+			$query5->values($data);
 		}
 		$query5->execute();
 		$query6 = \DB::insert('user_metadata');

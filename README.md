@@ -20,6 +20,8 @@ implementation of Ethanol's features.
 Installation
 ============
 
+Ethanol requires Fuel core and orm 1.5/develop or better.
+
 Simply copy the package to your packages folder and add the following to your
 app config file to ensure Ethanol is loaded.
 

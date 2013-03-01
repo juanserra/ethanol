@@ -15,13 +15,14 @@ class Ethanol
 	private static $session_key = 'ethanol.user';
 	private static $guest_user_id = 0;
 	private $driver;
+	protected $current_user = null;
+	protected $guest_user = null;
 
 	public static function instance($driver_name = null)
 	{
-		if ($driver_name == null)
-			$driver_name = \Config::get('ethanol.default_auth_driver');
+		if ( $driver_name == null ) $driver_name = \Config::get('ethanol.default_auth_driver');
 
-		if (!$instance = \Arr::get(static::$instances, $driver_name, false))
+		if ( !$instance = \Arr::get(static::$instances, $driver_name, false) )
 		{
 			$instance = static::$instances[$driver_name] = new static($driver_name);
 		}
@@ -50,21 +51,23 @@ class Ethanol
 	public function log_in($credentials)
 	{
 		$user = Auth::instance()->validate_user($credentials);
-		
-		if($user == false)
+
+		if ( $user == false )
 		{
 			//Could not validate for some reasion so make things explode
 			$email = \Arr::get($credentials, 'email', null);
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS,
+				$email);
 		}
 		else
 		{
 			//Nothing exploded up to this point so assume that the user has logged
 			//in ok.
-			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $user->email);
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD,
+				$user->email);
 			Session::instance()->get_instance()->set(static::$session_key, $user->id);
 		}
-		
+
 		return $user;
 	}
 
@@ -75,11 +78,11 @@ class Ethanol
 	 * 
 	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
 	 */
-	public function get_form($drivers=null)
+	public function get_form($drivers = null)
 	{
 		return Auth::instance()->get_form($drivers);
 	}
-	
+
 	/**
 	 * Returns an array of driver names that reconise the given email address. 
 	 * The array will be empty if the user is not reconised by any drivers.
@@ -102,7 +105,7 @@ class Ethanol
 	 * 
 	 */
 	public function create_user($userdata)
-	{	
+	{
 		return Auth::instance()->create_user($this->driver, $userdata);
 	}
 
@@ -125,25 +128,30 @@ class Ethanol
 	 */
 	public function current_user()
 	{
-		$userID = Session::instance()->get_instance()->get(static::$session_key, false);
-
-		if (!$userID)
+		if ( is_null($this->current_user) )
 		{
-			$user = $this->construct_guest_user();
-		}
-		else
-		{
-			//TODO: cache this
-			$user = Model_User::find($userID, array(
-				'related' => array(
-					'meta',
-					'groups',
-					'groups.permissions'
-				),
-			));
+			$userID = Session::instance()->get_instance()->get(static::$session_key,
+				false);
+
+			if ( !$userID )
+			{
+				$this->current_user = $this->construct_guest_user();
+			}
+			else
+			{
+				//TODO: cache this
+				$this->current_user = Model_User::find($userID,
+						array(
+						'related' => array(
+							'meta',
+							'groups',
+							'groups.permissions'
+						),
+				));
+			}
 		}
 
-		return $user;
+		return $this->current_user;
 	}
 
 	/**
@@ -153,8 +161,6 @@ class Ethanol
 	 */
 	private function construct_guest_user()
 	{
-		//TODO: Cache this.
-
 		$user = new Model_User;
 		$user->id = static::$guest_user_id;
 		$user->meta = new Model_User_Meta;
@@ -163,7 +169,7 @@ class Ethanol
 
 		return $user;
 	}
-	
+
 	/**
 	 * If the current user is a guest or not.
 	 * 
@@ -200,20 +206,21 @@ class Ethanol
 	 */
 	public function set_user_groups($user, $groups)
 	{
-		if (is_numeric($user))
+		if ( is_numeric($user) )
 		{
 			$user = $this->get_user($user);
 		}
 
-		$groups = Model_User_Group::find('all', array(
+		$groups = Model_User_Group::find('all',
+				array(
 				'where' => array(
 					array('id', 'IN', $groups),
 				),
-			));
+		));
 
 		//This is really messy. I should really find a better way to do this :<
 		unset($user->groups);
-		foreach ($groups as $group)
+		foreach ( $groups as $group )
 		{
 			$user->groups[] = $group;
 		}
@@ -229,14 +236,15 @@ class Ethanol
 	 */
 	public function get_user($id)
 	{
-		$user = Model_User::find($id, array(
+		$user = Model_User::find($id,
+				array(
 				'related' => array(
 					'meta',
 					'groups',
 				)
-			));
+		));
 
-		if (!$user)
+		if ( !$user )
 		{
 			throw new NoSuchUser(\Lang::get('ethanol.errors.noSuchUser'));
 		}
@@ -249,14 +257,15 @@ class Ethanol
 	 */
 	public function get_users()
 	{
-		$users = Model_User::find('all', array(
+		$users = Model_User::find('all',
+				array(
 				'related' => array(
 					'groups',
 					'meta',
 				),
-			));
+		));
 
-		if (count($users) == 0)
+		if ( count($users) == 0 )
 		{
 			throw new NoUsers(\Lang::get('ethanol.errors.noUsers'));
 		}
@@ -305,13 +314,14 @@ class Ethanol
 	 */
 	public function get_group($id)
 	{
-		$group = Model_User_Group::find($id, array(
+		$group = Model_User_Group::find($id,
+				array(
 				'related' => array(
 					'permissions',
 				),
-			));
+		));
 
-		if (!$group)
+		if ( !$group )
 		{
 			throw new GroupNotFound(\Lang::get('ethanol.errors.groupNotFound'));
 		}
@@ -328,7 +338,7 @@ class Ethanol
 	 */
 	public function update_group($group, $name)
 	{
-		if (is_numeric($group))
+		if ( is_numeric($group) )
 		{
 			$group = $this->get_group($group);
 		}
@@ -346,15 +356,15 @@ class Ethanol
 	 */
 	public function add_group_permission($group, $permission)
 	{
-		if (is_numeric($group))
+		if ( is_numeric($group) )
 		{
 			$group = $this->get_group($group);
 		}
 
 		//Check that the permission does not exist already.
-		foreach ($group->permissions as $groupPermission)
+		foreach ( $group->permissions as $groupPermission )
 		{
-			if ($groupPermission->identifier == $permission)
+			if ( $groupPermission->identifier == $permission )
 			{
 				//Permission has already been added so don't add it again.
 				return;
@@ -377,20 +387,20 @@ class Ethanol
 	 */
 	public function remove_group_permission($group, $permission)
 	{
-		if (is_numeric($group))
+		if ( is_numeric($group) )
 		{
 			$group = $this->get_group($group);
 		}
 
-		if (is_numeric($permission))
+		if ( is_numeric($permission) )
 		{
 			$group->permissions[$permission]->delete();
 			return;
 		}
 
-		foreach ($group->permissions as $groupPermission)
+		foreach ( $group->permissions as $groupPermission )
 		{
-			if ($groupPermission->identifier == $permission)
+			if ( $groupPermission->identifier == $permission )
 			{
 				$group->permissions[$groupPermission->id]->delete();
 				return;
@@ -407,15 +417,15 @@ class Ethanol
 	 */
 	public function group_has_permission($group, $toCheck)
 	{
-		if (is_numeric($group))
+		if ( is_numeric($group) )
 		{
 			$group = $this->get_group($group);
 		}
 
-		foreach ($group->permissions as $groupPermission)
+		foreach ( $group->permissions as $groupPermission )
 		{
-			if (\Str::starts_with($groupPermission->identifier, $toCheck) ||
-				\Str::starts_with($toCheck, $groupPermission->identifier))
+			if ( \Str::starts_with($groupPermission->identifier, $toCheck) ||
+				\Str::starts_with($toCheck, $groupPermission->identifier) )
 			{
 				return true;
 			}
@@ -433,18 +443,18 @@ class Ethanol
 	 */
 	public function user_has_permission($toCheck, $user = null)
 	{
-		if ($user == null)
+		if ( $user == null )
 		{
 			$user = $this->current_user();
 		}
-		else if (is_numeric($user))
+		else if ( is_numeric($user) )
 		{
 			$user = $this->get_user($user);
 		}
 
-		foreach ($user->groups as $group)
+		foreach ( $user->groups as $group )
 		{
-			if ($this->group_has_permission($group, $toCheck))
+			if ( $this->group_has_permission($group, $toCheck) )
 			{
 				return true;
 			}
@@ -483,7 +493,7 @@ class Ethanol
 	private function recursive_permission_select($permissions, $prefix = '')
 	{
 		$array = array();
-		foreach ($permissions as $perm => $children)
+		foreach ( $permissions as $perm => $children )
 		{
 			$name = $prefix . $perm;
 			$array[$name] = $name;
@@ -493,7 +503,7 @@ class Ethanol
 
 		return $array;
 	}
-	
+
 	/**
 	 * Bans an email address and/or an ip for the given time
 	 * 
@@ -501,7 +511,7 @@ class Ethanol
 	 * @param null|string|true $ip Null to ignore IP, string to specify the ip, true to automatically load the ip
 	 * @param null|string $email
 	 */
-	public function ban($time, $ip=null, $email=null)
+	public function ban($time, $ip = null, $email = null)
 	{
 		Banner::instance()->ban($time, $ip, $email);
 	}

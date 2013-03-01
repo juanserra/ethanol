@@ -22,16 +22,16 @@ Installation
 
 Ethanol requires Fuel core and orm 1.5/develop or better.
 
-Simply copy the package to your packages folder and add the following to your
-app config file to ensure Ethanol is loaded.
+Ethanol can be installed via composer by addding the following requirement to
+your `composer.json` file.
 
-```php
-    'always_load' => array(
-            'packages' => array(
-                    'ethanol',
-            ),
-    ),
+```JSON
+"require": {
+    "stevewest/ethanol": "dev-master"
+}
 ```
+
+Version numbers can be found under GitHub's tags.
 
 You then want to run the the migrations to create the needed database tables.
 

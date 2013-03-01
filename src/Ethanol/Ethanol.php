@@ -32,6 +32,7 @@ class Ethanol
 
 	private function __construct($driver_name)
 	{
+		Bootstrap::bootstrap();
 		$this->driver = $driver_name;
 	}
 

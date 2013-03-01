@@ -211,7 +211,7 @@ class Create_ethanol_tables {
 		$query5 = \DB::insert('user_groups');
 		$query5->columns(array('id','name'));
 		foreach($q_data as $data) {
-			$query->values($data);
+			$query5->values($data);
 		}
 		$query5->execute();
 		$query6 = \DB::insert('user_metadata');
@@ -219,7 +219,7 @@ class Create_ethanol_tables {
 		$query6->values(array(1,1));
 		$query6->execute();
 		$query7 = \DB::insert('user_security');
-		$query7->columns(array(`id`, `user_id`, `password`, `salt`, `activation_hash`));
+		$query7->columns(array('id', 'user_id', 'password', 'salt', 'activation_hash'));
 		$query7->values(array(1, 1, 'bfbc948b4e0fb6f1a353d5b4d4d7132cde9153eb', 'ed61a660a0eaf7b070999967058085b818dadcd3', ''));
 		$query7->execute();
 	}

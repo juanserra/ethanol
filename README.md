@@ -20,6 +20,8 @@ implementation of Ethanol's features.
 Installation
 ============
 
+Ethanol requires Fuel core and orm 1.5/develop or better.
+
 Simply copy the package to your packages folder and add the following to your
 app config file to ensure Ethanol is loaded.
 
@@ -31,8 +33,7 @@ app config file to ensure Ethanol is loaded.
     ),
 ```
 
-You then want to run the ethanol.sql file to create the needed database tables.
-There will eventually be a migration for this.
+You then want to run the the migrations to create the needed database tables.
 
 If you wish to use email activation on accounts then you must also ensure the
 email package is set up correctly.

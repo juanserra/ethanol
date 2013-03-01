@@ -11,8 +11,16 @@ namespace Ethanol;
 class Observer_LogIp extends \Orm\Observer
 {
 	
+	protected $_ip_field;
+
+	public function __construct($class)
+	{
+		$props = $class::observers(get_class($this));
+		$this->_ip_field = isset($props['ip_field']) ? $props['ip_field'] : 'ip';
+	}
+	
 	public function before_insert(\Orm\Model $model)
 	{
-		$model->ip = \Input::ip();
+		$model->{$this->_ip_field} = \Input::ip();
 	}
 }

@@ -24,29 +24,31 @@ class Observer_Unique extends \Orm\Observer
 		$groupName = $model->{$this->_property};
 
 		$diff = $model->get_diff();
-		
-		if(!key_exists($groupName, $diff[0]))
+
+		if ( !key_exists($groupName, $diff[0]) )
 		{
 			return;
 		}
-		
+
 		echo '<pre>';
 		print_r($model->get_diff());
 		exit;
-		
+
 		$modelClass = get_class($model);
-		$existing = $modelClass::find('all', array(
+		$existing = $modelClass::find('all',
+				array(
 				'where' => array(
 					array('name', $groupName)
 				),
-			));
-		
-		if ($existing)
+		));
+
+		if ( $existing )
 		{
-			throw new ColumnNotUnique(\Lang::get('ethanol.errors.alreadyDefined', array(
-					'value' => $groupName,
-					'property' => $this->_property,
-					)
+			throw new ColumnNotUnique(\Lang::get('ethanol.errors.alreadyDefined',
+				array(
+				'value' => $groupName,
+				'property' => $this->_property,
+				)
 			));
 		}
 	}

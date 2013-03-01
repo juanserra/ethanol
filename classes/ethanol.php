@@ -3,7 +3,7 @@
 namespace Ethanol;
 
 /**
- * Will contain a common interface to be able to easily access Ethanol features
+ * Defines a common interface to be able to easily access Ethanol features
  * 
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
@@ -57,11 +57,13 @@ class Ethanol
 			$email = \Arr::get($credentials, 'email', null);
 			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS, $email);
 		}
-		
-		//Nothing exploded up to this point so assume that the user has logged
-		//in ok.
-		Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $user->email);
-		\Session::set(static::$session_key, $user->id);
+		else
+		{
+			//Nothing exploded up to this point so assume that the user has logged
+			//in ok.
+			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD, $user->email);
+			Session::instance()->get_instance()->set(static::$session_key, $user->id);
+		}
 		
 		return $user;
 	}
@@ -123,7 +125,7 @@ class Ethanol
 	 */
 	public function current_user()
 	{
-		$userID = \Session::get(static::$session_key, false);
+		$userID = Session::instance()->get_instance()->get(static::$session_key, false);
 
 		if (!$userID)
 		{
@@ -187,7 +189,7 @@ class Ethanol
 	 */
 	public function log_out()
 	{
-		\Session::set(static::$session_key, false);
+		Session::instance()->get_instance()->set(static::$session_key, false);
 	}
 
 	/**

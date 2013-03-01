@@ -6,6 +6,8 @@ Package::load('orm');
 Autoloader::add_classes(array(
 	'Ethanol\Ethanol'              => __DIR__.'/classes/ethanol.php',
 	
+	'Ethanol\Session'			   => __DIR__.'/classes/session.php',
+	
 	//Hashing related classes
 	'Ethanol\Hasher'               => __DIR__.'/classes/hasher.php',
 	'Ethanol\Hash_Driver'          => __DIR__.'/classes/hash/driver.php',

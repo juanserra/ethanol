@@ -20,7 +20,7 @@ class Model_User_Oauth extends \Orm\Model
 	protected static $_belongs_to = array(
 		'user' => array(
 			'key_from' => 'user_id',
-			'model_to' => 'Ethanol\Model_User',
+			'model_to' => '\Ethanol\Model_User',
 			'key_to' => 'id',
 		),
 	);

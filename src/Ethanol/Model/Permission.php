@@ -21,7 +21,7 @@ class Model_Permission extends \Orm\Model
 		//Permissions
 		'groups' => array(
 			'key_from' => 'group_id',
-			'model_to' => 'Ethanol\Model_User_Group',
+			'model_to' => '\Ethanol\Model_User_Group',
 			'key_to' => 'id',
 		),
 	);

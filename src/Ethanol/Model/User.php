@@ -29,14 +29,14 @@ class Model_User extends \Orm\Model
 		//Has one meta data
 		'meta' => array(
 			'key_from' => 'id',
-			'model_to' => 'Ethanol\Model_User_Meta',
+			'model_to' => '\Ethanol\Model_User_Meta',
 			'key_to' => 'user_id',
 			'cascade_delete' => true,
 		),
 		//Security
 		'security' => array(
 			'key_from' => 'id',
-			'model_to' => 'Ethanol\Model_User_Security',
+			'model_to' => '\Ethanol\Model_User_Security',
 			'key_to' => 'user_id',
 			'cascade_delete' => true,
 		),
@@ -44,7 +44,7 @@ class Model_User extends \Orm\Model
 	protected static $_has_many = array(
 		'oauth' => array(
 			'key_from' => 'id',
-			'model_to' => 'Ethanol\Model_User_Oauth',
+			'model_to' => '\Ethanol\Model_User_Oauth',
 			'key_to' => 'user_id',
 			'cascade_delete' => true,
 		),
@@ -56,7 +56,7 @@ class Model_User extends \Orm\Model
 			'key_through_from' => 'user_id', // column 1 from the table in between, should match a posts.id
 			'table_through' => 'ethanol_groups_users', // both models plural without prefix in alphabetical order
 			'key_through_to' => 'group_id', // column 2 from the table in between, should match a users.id
-			'model_to' => 'Ethanol\Model_User_Group',
+			'model_to' => '\Ethanol\Model_User_Group',
 			'key_to' => 'id',
 		),
 	);

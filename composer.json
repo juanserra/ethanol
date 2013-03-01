@@ -22,6 +22,7 @@
 	"autoload": {
         "psr-0": {
             "Ethanol": "src"
-        }
+        },
+        "files": ["bootstrap.php"]
     }
 }

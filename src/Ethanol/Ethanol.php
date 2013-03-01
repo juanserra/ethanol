@@ -33,16 +33,6 @@ class Ethanol
 	private function __construct($driver_name)
 	{
 		$this->driver = $driver_name;
-		
-		//For fuel v1 add to the finder path
-		if(  class_exists('\Finder') )
-		{
-			\Finder::instance()->add_path(__DIR__.DS.'..'.DS.'..');
-		}
-		
-		\Config::load('ethanol', true);
-		\Config::load('ethanol_permissions', true);
-		\Lang::load('ethanol', 'ethanol');
 	}
 
 	/**

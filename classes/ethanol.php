@@ -159,15 +159,27 @@ class Ethanol
 	 * 
 	 * @return \Ethanol\Model_User
 	 */
-	private function construct_guest_user()
+	protected function construct_guest_user()
 	{
-		$user = new Model_User;
-		$user->id = static::$guest_user_id;
-		$user->meta = new Model_User_Meta;
+		if ( is_null($this->guest_user) )
+		{
+			$user = new Model_User;
+			$user->id = static::$guest_user_id;
+			$user->meta = new Model_User_Meta;
 
-		//TODO: Add guest groups + permissions
+			//Load the guest's groups
+			$groups = \Config::get('ethanol.guest.groups');
 
-		return $user;
+			foreach ( $groups as $group )
+			{
+				//Try and find the group
+				$user->groups[] = $this->get_group($group);
+			}
+
+			$this->guest_user = $user;
+		}
+
+		return $this->guest_user;
 	}
 
 	/**

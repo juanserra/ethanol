@@ -43,4 +43,11 @@ return array(
 		'client_id' => '',
 		'client_secret' => '',
 	),
+	
+	//Defines default guest groups
+	'guest' => array(
+		'groups' => array(
+			1, //Default id of the guest group
+		),
+	),
 );

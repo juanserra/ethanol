@@ -1,7 +1,7 @@
 <?php
 
 //Make sure orm is loaded first as we need this
-Package::load('orm');
+\Package::load('orm');
 
 //For fuel v1 add to the finder path
 if(  class_exists('\Finder') )

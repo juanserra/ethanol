@@ -67,7 +67,8 @@ class Ethanol
 			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD,
 				$user->email);
 			Session::instance()->get_instance()->set(static::$session_key, $user->id);
-			\Event::has_events('ethanol_logged_in') and \Event::trigger('ethanol_logged_in', $user);
+			\Event::has_events('ethanol_logged_in') and \Event::trigger('ethanol_logged_in',
+					$user);
 		}
 
 		return $user;
@@ -109,7 +110,8 @@ class Ethanol
 	public function create_user($userdata)
 	{
 		$user = Auth::instance()->create_user($this->driver, $userdata);
-		\Event::has_events('ethanol_user_created') and \Event::trigger('ethanol_user_created', $user);
+		\Event::has_events('ethanol_user_created') and \Event::trigger('ethanol_user_created',
+				$user);
 		return $user;
 	}
 
@@ -122,7 +124,8 @@ class Ethanol
 	public function activate($userdata)
 	{
 		$user = Auth::instance()->activate_user($this->driver, $userdata);
-		\Event::has_events('ethanol_user_activate') and \Event::trigger('ethanol_user_activate', $user);
+		\Event::has_events('ethanol_user_activate') and \Event::trigger('ethanol_user_activate',
+				$user);
 		return $user;
 	}
 
@@ -233,28 +236,28 @@ class Ethanol
 		}
 
 		$existing_groups = \Arr::pluck($user->groups, 'id');
-		
+
 		//Use array diff to work out which groups need to be added and deleted
 		$to_add = array_diff($groups, $existing_groups);
 		$to_delete = array_diff($existing_groups, $groups);
-		
+
 		//Delete any groups needed
-		foreach($to_delete as $id)
+		foreach ( $to_delete as $id )
 		{
 			unset($user->groups[$id]);
 		}
-		
+
 		//Now add any that need to be added
-		foreach($to_add as $id)
+		foreach ( $to_add as $id )
 		{
 			//Get the group
 			$group = $this->get_group($id);
 			$user->groups[] = $group;
 		}
-		
+
 		//Finally save the changes
 		$user->save();
-		
+
 		return $this;
 	}
 

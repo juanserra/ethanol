@@ -218,7 +218,9 @@ class Ethanol
 	}
 
 	/**
-	 * Sets the groups for the given user
+	 * Sets the groups for the given user. Any groups assigned to the user but
+	 * not in the given list of groups will be removed and any groups that are
+	 * in the list but not assigned will be assigned to the user.
 	 * 
 	 * @param int|Ethanol\Model_User $user The user to modify
 	 * @param array(int) $groups The groups to set
@@ -230,20 +232,30 @@ class Ethanol
 			$user = $this->get_user($user);
 		}
 
-		$groups = Model_User_Group::find('all',
-				array(
-				'where' => array(
-					array('id', 'IN', $groups),
-				),
-		));
-
-		//This is really messy. I should really find a better way to do this :<
-		unset($user->groups);
-		foreach ( $groups as $group )
+		$existing_groups = \Arr::pluck($user->groups, 'id');
+		
+		//Use array diff to work out which groups need to be added and deleted
+		$to_add = array_diff($groups, $existing_groups);
+		$to_delete = array_diff($existing_groups, $groups);
+		
+		//Delete any groups needed
+		foreach($to_delete as $id)
 		{
+			unset($user->groups[$id]);
+		}
+		
+		//Now add any that need to be added
+		foreach($to_add as $id)
+		{
+			//Get the group
+			$group = $this->get_group($id);
 			$user->groups[] = $group;
 		}
+		
+		//Finally save the changes
 		$user->save();
+		
+		return $this;
 	}
 
 	/**

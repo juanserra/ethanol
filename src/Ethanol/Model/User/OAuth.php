@@ -9,7 +9,7 @@ namespace Ethanol;
  */
 class Model_User_Oauth extends \Orm\Model
 {
-	
+
 	protected static $_table_name = 'ethanol_user_oauth';
 	protected static $_properties = array(
 		'id',
@@ -24,4 +24,5 @@ class Model_User_Oauth extends \Orm\Model
 			'key_to' => 'id',
 		),
 	);
+
 }

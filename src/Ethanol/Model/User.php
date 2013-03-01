@@ -44,7 +44,7 @@ class Model_User extends \Orm\Model
 	protected static $_has_many = array(
 		'oauth' => array(
 			'key_from' => 'id',
-			'model_to' => '\Ethanol\Model_User_Oauth',
+			'model_to' => '\Ethanol\Model_User_OAuth',
 			'key_to' => 'user_id',
 			'cascade_delete' => true,
 		),

@@ -58,6 +58,7 @@ class Ethanol
 			$email = \Arr::get($credentials, 'email', null);
 			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_BAD_CRIDENTIALS,
 				$email);
+			\Event::has_events('ethanol_log_in_failed') and \Event::trigger('ethanol_log_in_failed');
 		}
 		else
 		{
@@ -66,6 +67,7 @@ class Ethanol
 			Logger::instance()->log_log_in_attempt(Model_Log_In_Attempt::$ATTEMPT_GOOD,
 				$user->email);
 			Session::instance()->get_instance()->set(static::$session_key, $user->id);
+			\Event::has_events('ethanol_logged_in') and \Event::trigger('ethanol_logged_in', $user);
 		}
 
 		return $user;
@@ -106,7 +108,9 @@ class Ethanol
 	 */
 	public function create_user($userdata)
 	{
-		return Auth::instance()->create_user($this->driver, $userdata);
+		$user = Auth::instance()->create_user($this->driver, $userdata);
+		\Event::has_events('ethanol_user_created') and \Event::trigger('ethanol_user_created', $user);
+		return $user;
 	}
 
 	/**
@@ -117,7 +121,9 @@ class Ethanol
 	 */
 	public function activate($userdata)
 	{
-		return Auth::instance()->activate_user($this->driver, $userdata);
+		$user = Auth::instance()->activate_user($this->driver, $userdata);
+		\Event::has_events('ethanol_user_activate') and \Event::trigger('ethanol_user_activate', $user);
+		return $user;
 	}
 
 	/**
@@ -208,6 +214,7 @@ class Ethanol
 	public function log_out()
 	{
 		Session::instance()->get_instance()->set(static::$session_key, false);
+		\Event::has_events('ethanol_logged_out') and \Event::trigger('ethanol_logged_out');
 	}
 
 	/**

@@ -2,12 +2,14 @@
 <table>
 	<tr>
 		<td>
-			<?php echo Form::label(Lang::get('ethanol.email')); ?><?php echo Form::input('email', '', array('type' => 'email')); ?>
+			<?php echo Form::label(Lang::get('ethanol.email')); ?>
+			<?php echo Form::input('email', '', array('type' => 'email', 'placeholder' => Lang::get('ethanol.email'))); ?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<?php echo Form::label(Lang::get('ethanol.password')); ?><?php echo Form::password('password'); ?>
+			<?php echo Form::label(Lang::get('ethanol.password')); ?>
+			<?php echo Form::password('password', '', array('placeholder' => Lang::get('ethanol.password'))); ?>
 		</td>
 	</tr>
 	<tr>

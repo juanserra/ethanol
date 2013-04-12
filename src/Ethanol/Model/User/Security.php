@@ -16,6 +16,7 @@ class Model_User_Security extends \Orm\Model
 		'password',
 		'salt',
 		'activation_hash',
+		'forgot_pass_hash'
 	);
 	protected static $_belongs_to = array(
 		'user' => array(

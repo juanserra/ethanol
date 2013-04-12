@@ -147,5 +147,57 @@ class Auth_Driver_Database extends Auth_Driver
 			->set('submitUri', $submitUri)
 			->render();
 	}
+	
+	public static function generateResetPassHash($email)
+	{
+		$user = Model_User::find('first', array(
+			'related' => array(
+				'security',
+				'meta',
+				'groups',
+			),
+			'where' => array(
+				array('email', $email),
+			),
+		));
+		
+		$hash = \Ethanol\Hasher::instance()->hash($user->email, $user->security->salt);
+		$user->security->forgot_pass_hash = $hash;
+		$user->security->save();
+		
+//		if (\Config::get('ethanol.activate_emails', false))
+//		{
+			//Send email
+			\Package::load('email');
+
+			//Build an array of data that can be passed to the email template
+			$emailData = array(
+				'name' => $user->meta->forename.' '.$user->meta->surname,
+				'email' => $user->email,
+				'link' => \Uri::create('admin/forgot_password/reset?hash='.$hash)
+			);
+
+			$email = \Email::forge()
+				->from(\Config::get('ethanol.activation_email_from'))
+				->reply_to(\Config::get('ethano.activation_email_from'))
+				->to($user->email, $user->meta->forename.' '.$user->meta->surname)
+				->subject(\Config::get('ethanol.activation_email_subject'))
+				->html_body(\View::forge('ethanol/forget_pass_email', $emailData))
+				->send();
+//		}		
+		
+		return $hash;
+	}
+	
+	public static function checkResetPassHash($hash)
+	{
+		$security = Model_User_Security::find('first', array(
+			'where' => array(
+				array('forgot_pass_hash', '=', $hash)
+			)
+		));
+		
+		return (!is_null($security));
+	}
 
 }

@@ -4,7 +4,7 @@ namespace Ethanol;
 
 /**
  * Defines a common interface to be able to easily access Ethanol features
- * 
+ *
  * @author Steve "uru" West <uruwolf@gmail.com>
  * @license http://philsturgeon.co.uk/code/dbad-license DbaD
  */
@@ -38,7 +38,7 @@ class Ethanol
 
 	/**
 	 * Attempts to log a user in
-	 * 
+	 *
 	 * @param array $credentials
 	 * @return Ethanol\Model_User The newly logged in user
 	 */
@@ -72,7 +72,7 @@ class Ethanol
 	 * Gets the login forms for the given drivers. If null is passed then all
 	 * forms will be returned. Alternatly an array of names can be passed to get
 	 * a select number of login forms or a string for a single login form.
-	 * 
+	 *
 	 * @param string|array|null $driver The name(s) of the drivers to get the forms for
 	 */
 	public function get_form($drivers = null)
@@ -81,9 +81,9 @@ class Ethanol
 	}
 
 	/**
-	 * Returns an array of driver names that reconise the given email address. 
+	 * Returns an array of driver names that reconise the given email address.
 	 * The array will be empty if the user is not reconised by any drivers.
-	 * 
+	 *
 	 * @param string $email
 	 * @return array
 	 */
@@ -95,11 +95,11 @@ class Ethanol
 	/**
 	 * Creates a new user. If you wish to use emails as usernames then just pass
 	 * the email address as the username as well.
-	 * 
+	 *
 	 * @param string $userdata
-	 * 
+	 *
 	 * @return Ethanol\Model_User The newly created user
-	 * 
+	 *
 	 */
 	public function create_user($userdata)
 	{
@@ -111,7 +111,7 @@ class Ethanol
 
 	/**
 	 * Activates a user when they need to confirm their email address
-	 * 
+	 *
 	 * @param string $userdata The information to pass to the driver
 	 * @return boolean True if the user was activated
 	 */
@@ -126,7 +126,7 @@ class Ethanol
 	/**
 	 * Gets the currently logged in user. Guests will be represented by a dummy
 	 * user object with 0 as the id.
-	 * 
+	 *
 	 * @return Ethanol\Model_User
 	 */
 	public function current_user()
@@ -159,20 +159,24 @@ class Ethanol
 
 	/**
 	 * Constructs a dummy guest user.
-	 * 
+	 *
 	 * @return \Ethanol\Model_User
 	 */
 	protected function construct_guest_user()
 	{
 		if ( is_null($this->guest_user) )
 		{
-			$user = new Model_User;
+			$user = new \stdClass();
 			$user->id = static::$guest_user_id;
-			$user->meta = new Model_User_Meta;
+
+			$meta = new \stdClass();
+			$user->meta = $meta;
+
+			$user->groups = array();
 
 			//Load the guest's groups
 			$groups = \Config::get('ethanol.guest.groups');
-			
+
 			foreach ( $groups as $group )
 			{
 				//Try and find the group
@@ -187,7 +191,7 @@ class Ethanol
 
 	/**
 	 * If the current user is a guest or not.
-	 * 
+	 *
 	 * @return boolean True if the current user is a guest user.
 	 */
 	public function is_guest()
@@ -197,7 +201,7 @@ class Ethanol
 
 	/**
 	 * Returns true if a user is logged in
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function logged_in()
@@ -218,7 +222,7 @@ class Ethanol
 	 * Sets the groups for the given user. Any groups assigned to the user but
 	 * not in the given list of groups will be removed and any groups that are
 	 * in the list but not assigned will be assigned to the user.
-	 * 
+	 *
 	 * @param int|Ethanol\Model_User $user The user to modify
 	 * @param array(int) $groups The groups to set
 	 */
@@ -257,7 +261,7 @@ class Ethanol
 
 	/**
 	 * Gets a single user based on the ID
-	 * 
+	 *
 	 * @param int $id
 	 * @return Ethanol\Model_User
 	 * @throws NoSuchUser If the user cannot be found
@@ -311,7 +315,7 @@ class Ethanol
 
 	/**
 	 * Adds a group.
-	 * 
+	 *
 	 * @param string $name
 	 * @throws Ethanol\ColumnNotUnique If the name is taken
 	 */
@@ -324,7 +328,7 @@ class Ethanol
 
 	/**
 	 * Removes a group
-	 * 
+	 *
 	 * @param int $group The identifier for the group to delete
 	 */
 	public function delete_group($group)
@@ -335,7 +339,7 @@ class Ethanol
 
 	/**
 	 * Gets information on a single group
-	 * 
+	 *
 	 * @param int $id ID of the group to get
 	 * @return Ethanol\Model_User_Group if a group is found
 	 * @throws Ethanol\GroupNotFound if the group could not be found.
@@ -359,7 +363,7 @@ class Ethanol
 
 	/**
 	 * Allows a group to be updated.
-	 * 
+	 *
 	 * @param int|Model_User_Group $group If an ID is given the group will be loaded
 	 * @param string $name The new name for the group
 	 * @throws Ethanol\ColumnNotUnique If the name is taken
@@ -378,7 +382,7 @@ class Ethanol
 	/**
 	 * Adds a permission to the given group. If the permission has already
 	 * been assigned nothing happens.
-	 * 
+	 *
 	 * @param Ethanol\Model_User_Group|int $group
 	 * @param string $permission
 	 */
@@ -409,7 +413,7 @@ class Ethanol
 
 	/**
 	 * Removes a permission from the given group
-	 * 
+	 *
 	 * @param Ethanol\Model_User_Group|int $group Group to remove the permission from
 	 * @param string|int $permission Can either be an id or a string identifier (eg, 'admin.blog.edit')
 	 */
@@ -438,7 +442,7 @@ class Ethanol
 
 	/**
 	 * Checks if the given group has the given permission
-	 * 
+	 *
 	 * @param Ethanol\Model_User_Group|int $group
 	 * @param string $toCheck
 	 * @return boolean True if the group has the permission
@@ -464,7 +468,7 @@ class Ethanol
 
 	/**
 	 * Checks if a user has the given permission
-	 * 
+	 *
 	 * @param string $toCheck
 	 * @param Ethanol\Model_User|int|null $user If null the current user will be used
 	 * @return boolean True if the user has the permission
@@ -493,7 +497,7 @@ class Ethanol
 
 	/**
 	 * Retuns an array of all permissions registered.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_all_permissions()
@@ -513,7 +517,7 @@ class Ethanol
 
 	/**
 	 * Recursivly builds a list of permsssions as a dot notated list of keys
-	 * 
+	 *
 	 * @param type $permissions
 	 * @param type $prefix
 	 * @return type
@@ -534,7 +538,7 @@ class Ethanol
 
 	/**
 	 * Bans an email address and/or an ip for the given time
-	 * 
+	 *
 	 * @param string|int $time Number of seconds to ban for or something like "+1 Day"
 	 * @param null|string|true $ip Null to ignore IP, string to specify the ip, true to automatically load the ip
 	 * @param null|string $email
@@ -548,25 +552,25 @@ class Ethanol
 
 class LogInFailed extends \Exception
 {
-	
+
 }
 
 class GroupNotFound extends \Exception
 {
-	
+
 }
 
 class NoSuchUser extends \Exception
 {
-	
+
 }
 
 class UserExists extends \Exception
 {
-	
+
 }
 
 class ConfigError extends \Exception
 {
-	
+
 }
